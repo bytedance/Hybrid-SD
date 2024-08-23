@@ -1,0 +1,16 @@
+*.egg-info
+.vscode
+.env
+output_folder
+myimglist.txt
+__pycache__
+.envtest
+bench
+test_folder
+.coverage*
+.env*
+wandb
+*.pex
+.pexing
+build
+.hypothesis
