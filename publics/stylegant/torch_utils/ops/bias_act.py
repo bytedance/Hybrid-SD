@@ -11,7 +11,7 @@
 import os
 import numpy as np
 import torch
-import dnnlib
+import publics.stylegant.dnnlib as dnnlib
 
 from .. import custom_ops
 from .. import misc

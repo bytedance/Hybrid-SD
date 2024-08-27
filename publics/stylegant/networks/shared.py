@@ -14,7 +14,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 
-from torch_utils.ops import bias_act
+from publics.stylegant.torch_utils.ops import bias_act
 
 
 class ResidualBlock(nn.Module):

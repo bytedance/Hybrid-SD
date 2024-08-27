@@ -263,6 +263,55 @@ def parse_args():
         type=float,
         default=0.5
     )
+    # parser.add_argument(
+    #     "--input_dir",
+    #     type=str,
+    #     default='evaluation/coco2017/tiny_model_0601'
+    # )
+    # parser.add_argument(
+    #     "--input_root_real",
+    #     type=str,
+    #     default='evaluation/coco2017/val2017_resize_5'
+    # )
+
+    # parser.add_argument("--model_path", type=str ,default ='outputs/vae_decoder_only_l1-pruner_ratio-0.5',help='For pruner model only')  #/mnt/bn/bytenn-yg2/pxr/bytenn_diffusion_tools
+    parser.add_argument("--gen_dir", type=str, default = 'evaluation/coco2017/tiny_model_0601')
+    parser.add_argument("--input_root_real", type=str,default = 'evaluation/coco2017/val2017_resize_5')
+    parser.add_argument("--autoencoderkl_path", type=str,default = '/mnt/bn/bytenn-yg2/pretrained_models/runwayml--stable-diffusion-v1-5')
+    parser.add_argument("--perceptual_weight", type=float,default = 0.001)
+    parser.add_argument("--train_all_steps_start", type=float,default = 100000)
+    parser.add_argument("--device_ids", type=str,default = '0, 1, 2, 3')
+    parser.add_argument("--experiment_name", type=str,default = 'tinyvae_from_scratch_baseline_512_cgan_0603')
+    parser.add_argument("--if_use_average", type=bool,default = False)
+    parser.add_argument("--gan_rounds", type=float,default = 500)
+    parser.add_argument("--if_penalize", type=float ,default = 0)
+    parser.add_argument("--if_saturation_aug", type=bool ,default = False)
+    parser.add_argument("--if_use_highfrec", type=bool ,default = False)
+    parser.add_argument("--if_maxpool", type=bool ,default = False)
+    parser.add_argument("--if_bianyuan", type=bool ,default = False)
+    parser.add_argument("--gan_weight", type=float ,default = 1.0)
+    parser.add_argument("--penalize_weight", type=float ,default = 1.0)
+    parser.add_argument("--replay_buffer", type=bool ,default = False)
+    parser.add_argument("--disc_learning_rate", type=float ,default = 0.0001)
+    parser.add_argument("--disc_round", type=float ,default = 20)
+    parser.add_argument("--disc_step_before_start", type=float ,default = 2000)
+    parser.add_argument("--gan_mode_1_threshold", type=float ,default = 60000)
+    parser.add_argument("--gan_mode_1to2_disc_step", type=float ,default = 5000)
+    parser.add_argument("--gan_2_rounds", type=float ,default = 4)
+    parser.add_argument("--disc_2_rounds", type=float ,default = 20)
+    parser.add_argument("--if_color_augment", type=bool ,default = False)
+    parser.add_argument("--if_diff_loss", type=bool ,default = False)
+    parser.add_argument("--model_checkpoint", type=str ,default = '/mnt/bn/bytenn-yg2/pxr/bytenn_diffusion_tools/outputs_ldm/fintune_dino_fuxian/checkpoint-40000/vae.bin')
+    parser.add_argument("--if_gan", type=bool ,default = False)
+    parser.add_argument("--add_lq_input", type=bool ,default = False)
+    parser.add_argument("--if_decoder_distil", type=bool ,default = False)
+    parser.add_argument("--if_gan_add_l1", type=bool ,default = False)
+    parser.add_argument("--if_use_kl", type=bool ,default = False)
+    parser.add_argument("--visual_path", type=str ,default = '/mnt/bn/bytenn-yg2/datasets/taesd_visual')
+    parser.add_argument("--real_path", type=str ,default = '/mnt/bn/bytenn-yg2/datasets/coco2017_resize')
+
+    
+
 
     args = parser.parse_args()
 

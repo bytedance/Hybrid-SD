@@ -17,10 +17,11 @@
 
 
 ## **Introduction**
-Hybrid SD is a novel framework designed for edge-cloud collaborative inference of Stable Diffusion Models.
+Hybrid SD is a novel framework designed for edge-cloud collaborative inference of Stable Diffusion Models. By integrating the superior large models on cloud servers and efficient small models on edge devices, Hybrid SD achieves state-of-the-art parameter efficency on edge devices with competitive visual quality.
 
 ## Install
-
+conda create -n hybrid_sd python=3.9.2
+conda activate hybrid_sd
 ```bash
 pip install -r requirements.txt
 ```

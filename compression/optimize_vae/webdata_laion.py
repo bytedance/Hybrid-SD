@@ -1,5 +1,3 @@
-import sys
-sys.path.append("/mnt/bn/bytenn-yg2/liuhj/pylib")
 import collections
 import os
 import random
@@ -14,11 +12,10 @@ import torch
 from PIL import Image
 from torch.utils.data import Dataset
 import webdataset as wds
-from PIL import Image
 from torch.utils.data import DataLoader
 from torchvision import transforms
 from torchvision.transforms.functional import crop
-from transformers import CLIPTextModel, CLIPTokenizer
+from transformers import  CLIPTokenizer
 USED_KEYS = {"jpg": "instance_images", "json": "instance_prompt_ids"}
 
 
@@ -35,12 +32,14 @@ def verify_keysxl(samples, required_keys, handler=wds.handlers.reraise_exception
         except Exception as e:
             print("##############",str(e))
             continue
+        w, h = sample["jpg"].size
         
-        w, h = sample["jpg"].size   
-        if  w*h<600*700 or w<512 or h<512:
-            continue
-        if "pwatermark" in sample_json:
-            watermark = sample_json["pwatermark"]
+        if "aesthetic_score" in sample_json:
+            aesthetic_score = sample_json["aesthetic_score"]
+            if aesthetic_score < 5.65 or w*h<600*700 or w<600 or h<700:
+                continue
+        if "watermark" in sample_json:
+            watermark = sample_json["watermark"]
             if watermark > 0.5:
                 continue
         is_normal = True
@@ -134,6 +133,7 @@ class ImageEmbeddingDataset(wds.DataPipeline, wds.compat.FluidInterface):
 
         
 
+#tokenizer = CLIPTokenizer.from_pretrained('/mnt/bn/bytenn-data2/sd_models/runwayml--stable-diffusion-v1-5', subfolder="tokenizer")
 tokenizer = CLIPTokenizer.from_pretrained('/mnt/bn/bytenn-yg2/pretrained_models/runwayml--stable-diffusion-v1-5', subfolder="tokenizer")
 
 def tokenize_captions(texts, is_train=True):
@@ -155,14 +155,14 @@ def collate_fn(examples):
     return batch
 
 
-def WebDatasetAE(url, batch_size, size=512,num_workers=8, prefetch_factor=32):
+def WebDataset(url, batch_size, size=512,num_workers=8, prefetch_factor=32):
     print(f'loading dataset from path: {url}')
     urls = [os.path.join(url, file_name) for file_name in os.listdir(url) if file_name.endswith('.tar')]
     print(f'load dataset done')
 
     dataset = ImageEmbeddingDataset(
         urls,
-        shuffle_shards=True,
+        shuffle_shards=False,
         resample=False,
         size=size,
         handler=wds.handlers.warn_and_continue
@@ -185,45 +185,20 @@ def WebDatasetAE(url, batch_size, size=512,num_workers=8, prefetch_factor=32):
     return loader
 
 
-def freq_crop(input_t, band_width):
-
-    img_size = input_t.size(-1)
-    band_w = band_width // 2
-
-    img_f = torch.fft.fft2(input_t)
-
-    img_crop = torch.empty(
-        [input_t.size(0), input_t.size(1), band_w * 2, band_w * 2],
-        dtype=img_f.dtype, device=img_f.device
-        )
-
-    img_crop[:, :, :band_w, :band_w] = img_f[:, :, :band_w, :band_w]
-    img_crop[:, :, -band_w:, :band_w] = img_f[:, :, -band_w:, :band_w]
-    img_crop[:, :, :band_w, -band_w:] = img_f[:, :, :band_w, -band_w:]
-    img_crop[:, :, -band_w:, -band_w:] = img_f[:, :, -band_w:, -band_w:]
-
-    img_crop = img_crop * ((band_w * 2 / img_size) ** 2)
-
-    img_crop = torch.fft.ifft2(img_crop)
-    img_crop = torch.real(img_crop)
-
-    return img_crop
-
 if __name__ == "__main__":
-    # laion AE
-    url = "/mnt/bn/bytenn-yg2/datasets/laion2b_en_aesthetics/data" 
-    #url = "/mnt/bn/bytenn-yg2/datasets/cc12m/data"
-    #url = '/mnt/bn/bytenn-yg2/datasets/Laion_aesthetics_5plus_1024_33M/Laion33m_data'
-    batch_size = 32
-    train_dataloader = WebDatasetAE(url, batch_size=batch_size,size=512, num_workers=8)
+    url = '/mnt/bn/bytenn-yg2/datasets/Laion_aesthetics_5plus_1024_33M/Laion33m_data'
+    batch_size = 64
+    
+    train_dataloader = WebDataset(url, batch_size=batch_size,size=1024)
    
+    
+
     for i, batch in enumerate(train_dataloader):
-        pass
-        #print(i)
+        print(i)
         image  = ((batch["pixel_values"] +1) * 127.5).detach().clamp(0, 255).to(torch.uint8).permute(0,2,3,1).numpy()
         for j in range(len(image)):
             img = Image.fromarray(image[j])
             img.save("/mnt/bn/bytenn-yg2/liuhj/bytenn_diffusion_tools/outputs/test_img/" + "img" + str(i) + '_' + str(j) +'.jpeg')
-
         # print(batch["pixel_values"])
         # print(batch["input_ids"])
+        #image.save("./test_image/" + str(i)+'.j')

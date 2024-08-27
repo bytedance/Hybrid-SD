@@ -11,9 +11,7 @@ Projected discriminator architecture from
 "StyleGAN-T: Unlocking the Power of GANs for Fast Large-Scale Text-to-Image Synthesis".
 """
 
-import sys
-sys.path.append("/mnt/bn/bytenn-yg2/liuhj/bytenn_diffusion_tools/publics/stylegant")
-sys.path.append("/mnt/bn/bytenn-yg2/liuhj/bytenn_diffusion_tools/publics")
+
 import numpy as np
 import torch
 import torch.nn as nn
@@ -23,11 +21,11 @@ from torchvision.transforms import RandomCrop, Normalize
 import timm
 from timm.data import IMAGENET_DEFAULT_MEAN, IMAGENET_DEFAULT_STD
 
-from torch_utils import misc
-from networks.shared import ResidualBlock, FullyConnectedLayer
-from networks.vit_utils import make_vit_backbone, forward_vit, make_vit_backbone2, forward_vit2
+from publics.stylegant.torch_utils import misc
+from publics.stylegant.networks.shared import ResidualBlock, FullyConnectedLayer
+from publics.stylegant.networks.vit_utils import make_vit_backbone, forward_vit, make_vit_backbone2, forward_vit2
 
-from stylegant.training.diffaug import DiffAugment
+from publics.stylegant.training.diffaug import DiffAugment
 
 
 class SpectralConv1d(nn.Conv1d):
