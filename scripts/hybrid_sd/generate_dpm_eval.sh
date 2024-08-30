@@ -18,17 +18,12 @@ MODEL_SMALL=a19_b21_oursTiny
 
 PATH_MODEL_LARGE=$MODEL_ROOT/$MODEL_LARGE
 PATH_MODEL_SMALL=$MODEL_ROOT/$MODEL_SMALL
-# PATH_MODEL_SMALL=/mnt/bn/bytenn-yg2/ycq/workspace/bytenn_diffusion_tools/results/NaivePrune/bk-sdm-tiny/a19_b21/checkpoint-50000
-# PATH_MODEL_SMALL=results/NaivePrune_SD15/bk-sdm-tiny/prune_combined_v2/a9_b17/2024-05-19-15-58-21/checkpoint-50000
-# PATH_MODEL_SMALL=/mnt/bn/bytenn-yg2/ycq/workspace/bytenn_diffusion_tools/results/NaivePrune_SD14/bk-sdm-tiny/prune_combined_v2/a19_b21/2024-05-15-22-00-19/checkpoint-50000
-# PATH_MODEL_SMALL=/mnt/bn/bytenn-yg2/liuhj/hybrid_sd/bytenn_diffusion_tools/results/finetune/NaivePrune/a19_b21/unet_finetuned/2024-08-01-20-43-15/checkpoint-50000
-# PATH_MODEL_SMALL=/mnt/bn/bytenn-yg2/ycq/workspace/bytenn_diffusion_tools/results/NaivePrune/bk-sdm-tiny/a19_b21/checkpoint-50000
+
 PATH_MODEL_SMALL=/mnt/bn/bytenn-yg2/ycq/workspace/bytenn_diffusion_tools/results/NaivePrune_SD14/bk-sdm-tiny/prune_combined_v2/a19_b21/2024-05-15-22-00-19/checkpoint-50000
-# PATH_MODEL_LARGE="CompVis/stable-diffusion-v1-4"
-# PATH_MODEL_SMALL="nota-ai/bk-sdm-tiny"
+
 
 GPU_NUM=0
-BATCH_SIZE=128
+BATCH_SIZE=64
 
 generate() {
     echo "PATH_MODEL_LARGE=$1"
@@ -79,56 +74,15 @@ calc_clip() {
     echo "============"
 }
 
-# STEP_LIST=("5,20" "10,15" "5,15")
-STEP_LIST=("0,25")
+STEP_LIST=("0,25" "5,20" "10,15" "20,5" "25,0")
 for STEP in ${STEP_LIST[@]};
 do
-    export OUTPUT_DIR=results/HybridSD_dpm_guidance7_fuxian_half/$MODEL_LARGE-$MODEL_SMALL-$STEP
+    export OUTPUT_DIR=results/HybridSD_dpm_guidance7/$MODEL_LARGE-$MODEL_SMALL-$STEP
     generate $PATH_MODEL_LARGE $PATH_MODEL_SMALL $OUTPUT_DIR $STEP
     calc_is $OUTPUT_DIR
     calc_fid $OUTPUT_DIR
     calc_clip $OUTPUT_DIR
 done
 
-# STEP_LIST=("5,20" "10,15" "0,25")
-# MODEL_LARGE=runwayml--stable-diffusion-v1-5
-# PATH_MODEL_LARGE=$MODEL_ROOT/$MODEL_LARGE
-# PATH_MODEL_SMALL=/mnt/bn/bytenn-yg2/ycq/workspace/bytenn_diffusion_tools/results/NaivePrune_SD15/bk-sdm-tiny/prune_combined_v2/a10_b22/2024-05-19-21-13-03/checkpoint-35000
 
-# for STEP in ${STEP_LIST[@]};
-# do
-#     export OUTPUT_DIR=results/HybridSD_dpm_guidance7/$MODEL_LARGE-$MODEL_SMALL-$STEP
-#     generate $PATH_MODEL_LARGE $PATH_MODEL_SMALL $OUTPUT_DIR $STEP
-#     calc_is $OUTPUT_DIR
-#     calc_fid $OUTPUT_DIR
-#     calc_clip $OUTPUT_DIR
-# done
-
-# STEP_LIST=("5,20" "10,15" "0,25")
-# MODEL_LARGE=CompVis--stable-diffusion-v1-4
-# PATH_MODEL_LARGE=$MODEL_ROOT/$MODEL_LARGE
-# PATH_MODEL_SMALL=/mnt/bn/bytenn-yg2/ycq/workspace/bytenn_diffusion_tools/results/NaivePrune_SD15/bk-sdm-tiny/prune_combined_v2/a9_b17/2024-05-19-15-58-21/checkpoint-50000
-
-# for STEP in ${STEP_LIST[@]};
-# do
-#     export OUTPUT_DIR=results/HybridSD_dpm_guidance7/$MODEL_LARGE-$MODEL_SMALL-$STEP
-#     generate $PATH_MODEL_LARGE $PATH_MODEL_SMALL $OUTPUT_DIR $STEP
-#     calc_is $OUTPUT_DIR
-#     calc_fid $OUTPUT_DIR
-#     calc_clip $OUTPUT_DIR
-# done
-
-# STEP_LIST=("5,20" "10,15" "0,25")
-# MODEL_LARGE=CompVis--stable-diffusion-v1-4
-# PATH_MODEL_LARGE=$MODEL_ROOT/$MODEL_LARGE
-# PATH_MODEL_SMALL=/mnt/bn/bytenn-yg2/ycq/workspace/bytenn_diffusion_tools/results/NaivePrune_SD15/bk-sdm-tiny/prune_combined_v2/a10_b22/2024-05-19-21-13-03/checkpoint-35000
-
-# for STEP in ${STEP_LIST[@]};
-# do
-#     export OUTPUT_DIR=results/HybridSD_dpm_guidance7/$MODEL_LARGE-$MODEL_SMALL-$STEP
-#     generate $PATH_MODEL_LARGE $PATH_MODEL_SMALL $OUTPUT_DIR $STEP
-#     calc_is $OUTPUT_DIR
-#     calc_fid $OUTPUT_DIR
-#     calc_clip $OUTPUT_DIR
-# done
 

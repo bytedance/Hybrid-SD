@@ -1,1 +1,0 @@
-python get_calibration_set_imagenet_ddim.py -r models/ldm/cin256-v2/model.ckpt -n 10 --batch_size 10 -c 20 -e 1.0 --seed 40 -l output/

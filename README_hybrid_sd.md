@@ -174,4 +174,15 @@ bash scripts/hybrid_sd/lcm_t2i_tiny.sh
 
 ### Replacing the VAE with our lightweight VAE
 
+
 ### Evaluation on MS-COCO Benchmark
+
+1. Evaluate hybrid inference with the large model SD-v1.4 and the small model our tiny U-Net on MS-COCO 2014 30K.
+```bash
+bash scripts/hybrid_sd/generate_dpm_eval.sh
+```
+
+2. Evaluate hybrid inference with LCMs on MS-COCO 2014 30K.
+```bash
+bash scripts/hybrid_sd/generate_lcm_eval.sh
+```

@@ -1,37 +1,24 @@
-
 export http_proxy=http://sys-proxy-rd-relay.byted.org:8118 https_proxy=http://sys-proxy-rd-relay.byted.org:8118 no_proxy=.byted.org 
 
 export PYTHONPATH='.'
 
 DATA_ROOT=/mnt/bn/bytenn-yg2/datasets
 MODEL_ROOT=/mnt/bn/bytenn-yg2/pretrained_models
-# DATA_ROOT=./datasets
-# MODEL_ROOT=./pretrained_models
-# MODEL_LARGE=SG161222--Realistic_Vision_V5.1_noVAE
-# MODEL_LARGE=stabilityai/stable-diffusion-xl-base-1.0
+
 
 TEACHER_MODEL=CompVis--stable-diffusion-v1-4
 MODEL_LARGE=SD14_LCM
-# MODEL_LARGE=runwayml--stable-diffusion-v1-5
-# MODEL_SMALL=nota-ai--bk-sdm-small
-# MODEL_SMALL=nota-ai--bk-sdm-tiny
-#MODEL_SMALL=nota-ai--bk-sdm-tiny_LCM
+
 MODEL_SMALL=ours-tiny_lcm
-# MODEL_SMALL=tea_sd15_tiny_a19_b21
+
 
 PATH_TEACHER_MODEL=$MODEL_ROOT/$TEACHER_MODEL
-PATH_MODEL_LARGE=results/lcm_sd14_2w_new
-#PATH_MODEL_SMALL=results/lcm_ours_tiny_sd14/checkpoint-20000
-PATH_MODEL_SMALL=results/lcm_sd_teacher_ours_224_tea_sd14
-#PATH_MODEL_SMALL=results/ours-tiny224_LCM/checkpoint-20000
-# PATH_MODEL_SMALL=/mnt/bn/bytenn-yg2/ycq/workspace/bytenn_diffusion_tools/results/NaivePrune/bk-sdm-tiny/a19_b21/checkpoint-50000
-# PATH_MODEL_SMALL=results/NaivePrune_SD15/bk-sdm-tiny/prune_combined_v2/a9_b17/2024-05-19-15-58-21/checkpoint-50000
-# PATH_MODEL_SMALL=/mnt/bn/bytenn-yg2/ycq/workspace/bytenn_diffusion_tools/results/NaivePrune_SD14/bk-sdm-tiny/prune_combined_v2/a19_b21/2024-05-15-22-00-19/checkpoint-50000
-# PATH_MODEL_SMALL=/mnt/bn/bytenn-yg2/ycq/workspace/bytenn_diffusion_tools/results/NaivePrune_SD14/bk-sdm-tiny/prune_combined_v2/a9_b17/2024-05-18-19-03-15/checkpoint-45000
-# PATH_MODEL_LARGE="CompVis/stable-diffusion-v1-4"
-# PATH_MODEL_SMALL="nota-ai/bk-sdm-tiny"
+PATH_MODEL_LARGE=/mnt/bn/bytenn-yg2/liuhj/hybrid_sd/bytenn_diffusion_tools/results/lcm_sd14_2w/checkpoint-20000 #results/lcm_sd14_2w/checkpoint-20000
+PATH_MODEL_SMALL=/mnt/bn/bytenn-yg2/liuhj/hybrid_sd/bytenn_diffusion_tools/results/lcm_ours_tiny_sd14/checkpoint-20000  #results/lcm_ours_tiny_sd14/checkpoint-20000
 
 
+
+VAE=origvae
 
 GPU_NUM=1
 BATCH_SIZE=64
@@ -75,6 +62,7 @@ calc_fid(){
     rm -rf $NPZ_NAME_gen
     NPZ_NAME_real=$DATA_ROOT/mscoco_val2014_41k_full/real_im256.npz
     CUDA_VISIBLE_DEVICES=$GPU_NUM python3 -m pytorch_fid --save-stats $1/im256 $NPZ_NAME_gen
+    CUDA_VISIBLE_DEVICES=$GPU_NUM python3 -m pytorch_fid --save-stats $1/im256 $NPZ_NAME_gen
     CUDA_VISIBLE_DEVICES=$GPU_NUM python3 -m pytorch_fid $NPZ_NAME_real $NPZ_NAME_gen | tee $FID_TXT
     rm -rf $NPZ_NAME_gen
     echo "============"
@@ -88,56 +76,13 @@ calc_clip() {
     echo "============"
 }
 
-STEP_LIST=("4,0"  "2,2"  "0,4")
-#STEP_LIST=("8,0")
+STEP_LIST=("8,0"  "4,4"  "0,8")
 for STEP in ${STEP_LIST[@]};
 do
-    export OUTPUT_DIR=results/HybridSD_LCM_guidance7_lcm_new_sd_teacher_ours_224_tea_sd14$MODEL_LARGE-$MODEL_SMALL-$STEP
+    export OUTPUT_DIR=results/HybridSD_LCM_guidance7_ours_Tiny_scale/$MODEL_LARGE-$MODEL_SMALL-$STEP
     generate $PATH_MODEL_LARGE $PATH_MODEL_SMALL $OUTPUT_DIR $STEP
     calc_is $OUTPUT_DIR
     calc_fid $OUTPUT_DIR
     calc_clip $OUTPUT_DIR
 done
-
-# STEP_LIST=("5,20" "10,15" "0,25")
-# MODEL_LARGE=runwayml--stable-diffusion-v1-5
-# PATH_MODEL_LARGE=$MODEL_ROOT/$MODEL_LARGE
-# PATH_MODEL_SMALL=/mnt/bn/bytenn-yg2/ycq/workspace/bytenn_diffusion_tools/results/NaivePrune_SD15/bk-sdm-tiny/prune_combined_v2/a10_b22/2024-05-19-21-13-03/checkpoint-35000
-
-# for STEP in ${STEP_LIST[@]};
-# do
-#     export OUTPUT_DIR=results/HybridSD_dpm_guidance7/$MODEL_LARGE-$MODEL_SMALL-$STEP
-#     generate $PATH_MODEL_LARGE $PATH_MODEL_SMALL $OUTPUT_DIR $STEP
-#     calc_is $OUTPUT_DIR
-#     calc_fid $OUTPUT_DIR
-#     calc_clip $OUTPUT_DIR
-# done
-
-# STEP_LIST=("5,20" "10,15" "0,25")
-# MODEL_LARGE=CompVis--stable-diffusion-v1-4
-# PATH_MODEL_LARGE=$MODEL_ROOT/$MODEL_LARGE
-# PATH_MODEL_SMALL=/mnt/bn/bytenn-yg2/ycq/workspace/bytenn_diffusion_tools/results/NaivePrune_SD15/bk-sdm-tiny/prune_combined_v2/a9_b17/2024-05-19-15-58-21/checkpoint-50000
-
-# for STEP in ${STEP_LIST[@]};
-# do
-#     export OUTPUT_DIR=results/HybridSD_dpm_guidance7/$MODEL_LARGE-$MODEL_SMALL-$STEP
-#     generate $PATH_MODEL_LARGE $PATH_MODEL_SMALL $OUTPUT_DIR $STEP
-#     calc_is $OUTPUT_DIR
-#     calc_fid $OUTPUT_DIR
-#     calc_clip $OUTPUT_DIR
-# done
-
-# STEP_LIST=("5,20" "10,15" "0,25")
-# MODEL_LARGE=CompVis--stable-diffusion-v1-4
-# PATH_MODEL_LARGE=$MODEL_ROOT/$MODEL_LARGE
-# PATH_MODEL_SMALL=/mnt/bn/bytenn-yg2/ycq/workspace/bytenn_diffusion_tools/results/NaivePrune_SD15/bk-sdm-tiny/prune_combined_v2/a10_b22/2024-05-19-21-13-03/checkpoint-35000
-
-# for STEP in ${STEP_LIST[@]};
-# do
-#     export OUTPUT_DIR=results/HybridSD_dpm_guidance7/$MODEL_LARGE-$MODEL_SMALL-$STEP
-#     generate $PATH_MODEL_LARGE $PATH_MODEL_SMALL $OUTPUT_DIR $STEP
-#     calc_is $OUTPUT_DIR
-#     calc_fid $OUTPUT_DIR
-#     calc_clip $OUTPUT_DIR
-# done
 

@@ -75,7 +75,7 @@ def evaluation_coco2017(vae,real_path,out_path,weight_dtype,logger):
     return psnr_score,lpips_score,fid_score
     
 
-def load_visualization_imgs(image_dir="/mnt/bn/bytenn-yg2/datasets/eval_img"):
+def load_visualization_imgs(image_dir="datasets/eval_img"):
     """ data range [-1,1] """
     transform = transforms.Compose([
     transforms.Resize((512, 512)),
@@ -92,5 +92,5 @@ def load_visualization_imgs(image_dir="/mnt/bn/bytenn-yg2/datasets/eval_img"):
 
 
 if __name__ == "__main__":
-    res = load_visualization_imgs(image_dir="/mnt/bn/bytenn-yg2/datasets/eval_img")
+    res = load_visualization_imgs(image_dir="datasets/eval_img")
 

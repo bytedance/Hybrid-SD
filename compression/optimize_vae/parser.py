@@ -6,7 +6,7 @@ def parse_args():
     parser.add_argument(
         "--pretrained_model_name_or_path",
         type=str,
-        default="/mnt/bn/bytenn-data2/sd_models/runwayml--stable-diffusion-v1-5",
+        default="sd_models/runwayml--stable-diffusion-v1-5",
         # required=True,
         help="Path to pretrained model or model identifier from huggingface.co/models.",
     )
@@ -34,7 +34,7 @@ def parse_args():
     parser.add_argument(
         "--train_data_dir",
         type=str,
-        default="/mnt/bn/bytenn-data2/liuhj/Laion_aesthetics_5plus_1024_33M",
+        default="liuhj/Laion_aesthetics_5plus_1024_33M",
         help=(
             "A folder containing the training data. Folder contents must follow the structure described in"
             " https://huggingface.co/docs/datasets/image_dataset#imagefolder. In particular, a `metadata.jsonl` file"
@@ -274,10 +274,10 @@ def parse_args():
     #     default='evaluation/coco2017/val2017_resize_5'
     # )
 
-    # parser.add_argument("--model_path", type=str ,default ='outputs/vae_decoder_only_l1-pruner_ratio-0.5',help='For pruner model only')  #/mnt/bn/bytenn-yg2/pxr/bytenn_diffusion_tools
+
     parser.add_argument("--gen_dir", type=str, default = 'evaluation/coco2017/tiny_model_0601')
     parser.add_argument("--input_root_real", type=str,default = 'evaluation/coco2017/val2017_resize_5')
-    parser.add_argument("--autoencoderkl_path", type=str,default = '/mnt/bn/bytenn-yg2/pretrained_models/runwayml--stable-diffusion-v1-5')
+    parser.add_argument("--autoencoderkl_path", type=str,default = 'pretrained_models/runwayml--stable-diffusion-v1-5')
     parser.add_argument("--perceptual_weight", type=float,default = 0.001)
     parser.add_argument("--train_all_steps_start", type=float,default = 100000)
     parser.add_argument("--device_ids", type=str,default = '0, 1, 2, 3')
@@ -301,14 +301,14 @@ def parse_args():
     parser.add_argument("--disc_2_rounds", type=float ,default = 20)
     parser.add_argument("--if_color_augment", type=bool ,default = False)
     parser.add_argument("--if_diff_loss", type=bool ,default = False)
-    parser.add_argument("--model_checkpoint", type=str ,default = '/mnt/bn/bytenn-yg2/pxr/bytenn_diffusion_tools/outputs_ldm/fintune_dino_fuxian/checkpoint-40000/vae.bin')
+    parser.add_argument("--model_checkpoint", type=str ,default = 'outputs_ldm/fintune_dino_fuxian/checkpoint-40000/vae.bin')
     parser.add_argument("--if_gan", type=bool ,default = False)
     parser.add_argument("--add_lq_input", type=bool ,default = False)
     parser.add_argument("--if_decoder_distil", type=bool ,default = False)
     parser.add_argument("--if_gan_add_l1", type=bool ,default = False)
     parser.add_argument("--if_use_kl", type=bool ,default = False)
-    parser.add_argument("--visual_path", type=str ,default = '/mnt/bn/bytenn-yg2/datasets/taesd_visual')
-    parser.add_argument("--real_path", type=str ,default = '/mnt/bn/bytenn-yg2/datasets/coco2017_resize')
+    parser.add_argument("--visual_path", type=str ,default = 'datasets/taesd_visual')
+    parser.add_argument("--real_path", type=str ,default = 'datasets/coco2017_resize')
 
     
 

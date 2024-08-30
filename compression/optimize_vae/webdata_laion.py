@@ -133,7 +133,7 @@ class ImageEmbeddingDataset(wds.DataPipeline, wds.compat.FluidInterface):
 
         
 
-#tokenizer = CLIPTokenizer.from_pretrained('/mnt/bn/bytenn-data2/sd_models/runwayml--stable-diffusion-v1-5', subfolder="tokenizer")
+
 tokenizer = CLIPTokenizer.from_pretrained('/mnt/bn/bytenn-yg2/pretrained_models/runwayml--stable-diffusion-v1-5', subfolder="tokenizer")
 
 def tokenize_captions(texts, is_train=True):

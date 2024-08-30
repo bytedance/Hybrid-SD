@@ -212,7 +212,7 @@ class HybridInferencePipeline:
             height = img_sz,
             width = img_sz,
             generator = self.generator,
-            #guidance_scale = guidance_scale,
+            guidance_scale = guidance_scale,
             num_images_per_prompt = num_images_per_prompt,
             save_path = save_path
         )
@@ -280,7 +280,7 @@ class HybridSDXLInferencePipeline:
             vae = AutoencoderTiny.from_pretrained(self.args.vae_path).to(self.device, dtype=torch.float16).requires_grad_(False)
         else:
             vae = AutoencoderKL.from_pretrained(
-                    "/mnt/bn/bytenn-yg2/pretrained_models/madebyollin--sdxl-vae-fp16-fix", subfolder="vae"
+                    "pretrained_models/madebyollin--sdxl-vae-fp16-fix", subfolder="vae"
                 ).to(self.device, dtype=torch.float16).requires_grad_(False)
         unets = []
         for path in self.weight_folders:
@@ -351,7 +351,7 @@ class HybridSDXLInferencePipeline:
             height = img_sz,
             width = img_sz,
             generator = self.generator,
-            #guidance_scale = guidance_scale,
+            guidance_scale = guidance_scale,
             num_images_per_prompt = num_images_per_prompt,
             save_path = save_path
         )
