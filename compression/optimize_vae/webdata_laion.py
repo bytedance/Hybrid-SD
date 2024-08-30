@@ -134,7 +134,7 @@ class ImageEmbeddingDataset(wds.DataPipeline, wds.compat.FluidInterface):
         
 
 
-tokenizer = CLIPTokenizer.from_pretrained('/mnt/bn/bytenn-yg2/pretrained_models/runwayml--stable-diffusion-v1-5', subfolder="tokenizer")
+tokenizer = CLIPTokenizer.from_pretrained('pretrained_models/runwayml--stable-diffusion-v1-5', subfolder="tokenizer")
 
 def tokenize_captions(texts, is_train=True):
         inputs = tokenizer(texts, max_length=tokenizer.model_max_length, padding="max_length", truncation=True, return_tensors="pt")
@@ -186,7 +186,7 @@ def WebDataset(url, batch_size, size=512,num_workers=8, prefetch_factor=32):
 
 
 if __name__ == "__main__":
-    url = '/mnt/bn/bytenn-yg2/datasets/Laion_aesthetics_5plus_1024_33M/Laion33m_data'
+    url = 'datasets/Laion_aesthetics_5plus_1024_33M/Laion33m_data'
     batch_size = 64
     
     train_dataloader = WebDataset(url, batch_size=batch_size,size=1024)
@@ -198,7 +198,4 @@ if __name__ == "__main__":
         image  = ((batch["pixel_values"] +1) * 127.5).detach().clamp(0, 255).to(torch.uint8).permute(0,2,3,1).numpy()
         for j in range(len(image)):
             img = Image.fromarray(image[j])
-            img.save("/mnt/bn/bytenn-yg2/liuhj/bytenn_diffusion_tools/outputs/test_img/" + "img" + str(i) + '_' + str(j) +'.jpeg')
-        # print(batch["pixel_values"])
-        # print(batch["input_ids"])
-        #image.save("./test_image/" + str(i)+'.j')
+            img.save("outputs/test_img/" + "img" + str(i) + '_' + str(j) +'.jpeg')

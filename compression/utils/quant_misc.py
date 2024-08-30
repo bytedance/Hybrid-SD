@@ -1,6 +1,6 @@
 import torch
 from collections import defaultdict
-ckpt_path = '/mnt/bn/ycq-lq/workspace/QuEST/experiment/2024-03-14-17-23-38/ckpt.pth'
+ckpt_path = ''
 ckpt = torch.load(ckpt_path)
 
 params_counter_dict = dict()

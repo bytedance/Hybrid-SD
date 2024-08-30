@@ -81,7 +81,7 @@ def parse_args():
     parser.add_argument(
         "--pretrained_teacher_model",
         type=str,
-        default="/mnt/bn/bytenn-yg2/pretrained_models/runwayml--stable-diffusion-v1-5",
+        default="pretrained_models/runwayml--stable-diffusion-v1-5",
         help="The path to specific teacher model.",
     )
     parser.add_argument(

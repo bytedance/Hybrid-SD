@@ -3,32 +3,32 @@ import numpy as np
 from compression.prune_sd.prune_utils import calculate_score
 import pickle
 
-result_dir = Path('/mnt/bn/bytenn-yg2/ycq/workspace/bytenn_diffusion_tools/results/NaivePrune/bk-sdm-tiny') 
-result_dir = Path('/mnt/bn/bytenn-yg2/liuhj/hybrid_sd/bytenn_diffusion_tools/results/debug')
-latent_path = [result_dir / 'origin'/ 'latents.npy']
-keys = []
-for i in range(1, 10):
-    latent_path.append(result_dir / f'prune_resnet_ratio0.5/prune_resnet_{i}/latents.npy')
+result_dir = Path('results/NaivePrune/bk-sdm-tiny/prune_oneshot')
+layer_info_path = result_dir / 'layer_infos.pickle'
 
-for i in range(1, 10):
-    latent_path.append(result_dir / f'prune_selfatt_heads4/prune_selfatt_{i}/latents.npy')
+with open(layer_info_path,'rb') as f:
+    all_layer_info = pickle.load(f)
 
-for i in range(1, 10):
-    latent_path.append(result_dir / f'prune_crossatt_heads4/prune_crossatt_{i}/latents.npy')
+eval_latents, keys = [], []
+for layer_info in all_layer_info:
+    prune_type = layer_info['prune_type']
+    vals = prune_type.split('_')
+    layer_name = ('_').join(vals[:-1])
+    ratio = vals[-1]
+    if layer_name == 'baseline' or ratio in ['0.5']:
+        print(f"get latent of {prune_type}")
+        eval_latents.append(layer_info['np_latents'])
+        if layer_name != 'baseline':
+            keys.append(layer_name)
 
-eval_latents = []
-
-for path in latent_path:
-    keys.append(path.parent.name)
-    eval_latents.append(np.load(path))
-
-keys = keys[1:]
 scores = calculate_score(eval_latents)
-
 score_dict = {}
 for k, score in zip(keys, scores):
     score_dict[k] = score
 print(score_dict)
 
-with open(result_dir / 'score.pkl', 'wb') as f:
+path = result_dir / 'score.pkl'
+with open(path, 'wb') as f:
     pickle.dump(score_dict, f)
+print(f"save score to {path}")
+

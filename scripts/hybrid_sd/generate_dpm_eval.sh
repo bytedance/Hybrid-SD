@@ -10,6 +10,7 @@ MODEL_LARGE=CompVis--stable-diffusion-v1-4
 # MODEL_LARGE=runwayml--stable-diffusion-v1-5
 # MODEL_SMALL=nota-ai--bk-sdm-small
 # MODEL_SMALL=nota-ai--bk-sdm-tiny
+
 MODEL_SMALL=a19_b21_oursTiny
 
 PATH_MODEL_LARGE=$MODEL_ROOT/$MODEL_LARGE

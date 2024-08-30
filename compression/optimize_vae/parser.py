@@ -34,7 +34,7 @@ def parse_args():
     parser.add_argument(
         "--train_data_dir",
         type=str,
-        default="liuhj/Laion_aesthetics_5plus_1024_33M",
+        default="Laion_aesthetics_5plus_1024_33M",
         help=(
             "A folder containing the training data. Folder contents must follow the structure described in"
             " https://huggingface.co/docs/datasets/image_dataset#imagefolder. In particular, a `metadata.jsonl` file"

@@ -10,13 +10,7 @@ import pdb
 import functools
 
 
-## relu只保留>0的pixel, 512的NLayerDiscriminator输出torch.Size([1, 1, 62, 62]),输出为[1e-4,1]
-## 按理来说logits_real应该大于logits_fake，1-logits_real< 1-logits_fake< 1 + logits_fake
-# def hinge_d_loss(logits_real, logits_fake):
-#     loss_real = torch.mean(F.relu(1. - logits_real)) ### pixel>1的都为0, 希望logits_real越小越好
-#     loss_fake = torch.mean(F.relu(1. + logits_fake)) ### pixel<-1的都为0, 希望logits_fake越大越好
-#     d_loss = 0.5 * (loss_real + loss_fake)
-#     return d_loss
+
 
 class NLayerDiscriminator(nn.Module):
     """Defines a PatchGAN discriminator as in Pix2Pix
@@ -128,7 +122,6 @@ class NLayerDiscriminator_condtion(nn.Module):
         cond = cond.repeat(1, 1, input.shape[-1]//cond.shape[-1], input.shape[-1]//cond.shape[-1]) #(1,4,64,64)
         input = torch.cat((input,cond), dim=1)
         return self.main(input)
-        #此处网络结构
         """[Conv2d(7, 64, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1)), LeakyReLU(negative_slope=0.2, inplace=True), 
         Conv2d(64, 128, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1)), InstanceNorm2d(128, eps=1e-05, momentum=0.1, affine=False, track_running_stats=False), LeakyReLU(negative_slope=0.2, inplace=True),
         Conv2d(128, 256, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1)), InstanceNorm2d(256, eps=1e-05, momentum=0.1, affine=False, track_running_stats=False), LeakyReLU(negative_slope=0.2, inplace=True),
@@ -323,117 +316,6 @@ class CharbonnierLoss(nn.Module):
         loss = torch.sum(torch.sqrt((x - y).pow(2) + self.eps**2))
         return loss*norm
 
-class LitevaeWithDiscriminator(nn.Module):
-    def __init__(self, disc_start, logvar_init=0.0, kl_weight=1.0, pixelloss_weight=1.0,
-                 disc_num_layers=3, disc_in_channels=3, disc_factor=1.0, disc_weight=1.0,
-                 perceptual_weight=1.0, use_actnorm=False, disc_conditional=False,
-                 disc_loss="hinge"):
-
-        super().__init__()
-        assert disc_loss in ["hinge", "vanilla"]
-        self.kl_weight = kl_weight
-        self.pixel_weight = pixelloss_weight
-        self.perceptual_loss = LPIPS().eval()
-        self.perceptual_weight = perceptual_weight
-        # output log variance
-        self.logvar = torch.ones(size=()) * logvar_init #nn.Parameter(torch.ones(size=()) * logvar_init)
-
-        self.discriminator = NLayerDiscriminator(input_nc=disc_in_channels,
-                                                 n_layers=disc_num_layers,
-                                                 use_actnorm=use_actnorm
-                                                 ).apply(weights_init)
-        self.discriminator_iter_start = disc_start
-        self.disc_loss = hinge_d_loss if disc_loss == "hinge" else vanilla_d_loss
-        self.disc_factor = disc_factor
-        self.discriminator_weight = disc_weight
-        self.disc_conditional = disc_conditional
-        self.gaussian =   GaussianBlur((7,7), sigma=(0.1, 2.0))
-        self.wavelet =  DWTH(J=1, mode='zero', wave='haar')  
-        self.charb = CharbonnierLoss(out_norm="")
-
-    #self.decoder.conv_out.weight (last_layer:self.decoder.conv_out.weight)
-    def calculate_adaptive_weight(self, nll_loss, g_loss, last_layer=None):
-        if last_layer is not None:
-            nll_grads = torch.autograd.grad(nll_loss, last_layer, retain_graph=True)[0]
-            g_grads = torch.autograd.grad(g_loss, last_layer, retain_graph=True)[0]
-        else:
-            nll_grads = torch.autograd.grad(nll_loss, self.last_layer[0], retain_graph=True)[0]
-            g_grads = torch.autograd.grad(g_loss, self.last_layer[0], retain_graph=True)[0]
-
-        d_weight = torch.norm(nll_grads) / (torch.norm(g_grads) + 1e-4)
-        d_weight = torch.clamp(d_weight, 0.0, 1e4).detach()
-        d_weight = d_weight * self.discriminator_weight
-        return d_weight
-
-    def high_frec_loss(self, inputs, reconstructions):
-        high_input = inputs - self.gaussian(inputs)
-        high_rec = reconstructions - self.gaussian(reconstructions)
-        gaussian_loss = F.l1_loss(high_input, high_rec, reduction="sum")
-        wave_input = self.wavelet(inputs)
-        wave_rec = self.wavelet(reconstructions)
-        wavelet_loss = self.charb(wave_input, wave_rec)
-        return gaussian_loss + wavelet_loss
-    
- 
-
-    def forward(self, inputs, reconstructions, posteriors, optimizer_idx,
-                global_step, cond=None, split="train",
-                weights=None):
-        B,C,H,W = inputs.shape
-        rec_loss = torch.abs(inputs.contiguous() - reconstructions.contiguous())
-        if self.perceptual_weight > 0:
-            p_loss = self.perceptual_loss(inputs.contiguous(), reconstructions.contiguous())
-            rec_loss = rec_loss + self.perceptual_weight * p_loss
-
-        nll_loss = rec_loss / torch.exp(self.logvar) + self.logvar
-        weighted_nll_loss = nll_loss
-        if weights is not None:
-            weighted_nll_loss = weights*nll_loss
-        weighted_nll_loss = torch.sum(weighted_nll_loss) / weighted_nll_loss.shape[0]
-        nll_loss = torch.sum(nll_loss) / nll_loss.shape[0]
-        kl_loss = posteriors.kl()
-        kl_loss = torch.sum(kl_loss) / kl_loss.shape[0]
-        # now the GAN part
-        if optimizer_idx == 0:
-            # generator update
-            if cond is None:
-                assert not self.disc_conditional
-                logits_fake = self.discriminator(reconstructions.contiguous())
-            else:
-                assert self.disc_conditional
-                logits_fake = self.discriminator(torch.cat((reconstructions.contiguous(), cond), dim=1))
-            g_loss =  -torch.mean(logits_fake)*(B*C*H*W)
-
-   
-
-            high_fre_loss = self.high_frec_loss(inputs, reconstructions)
-            loss = weighted_nll_loss + self.kl_weight * kl_loss +  0.05 * g_loss + 0.05 * high_fre_loss
-            log = {"total_loss":loss.clone().detach().mean(),
-                   "kl_loss": kl_loss.detach().mean(), "nll_loss":nll_loss.detach().mean(),
-                   "rec_loss": rec_loss.detach().mean(),
-                   "g_loss": g_loss.detach().mean(),
-                   "high_fre_loss":high_fre_loss.detach().mean()
-                   }
-            return loss, log
-
-        if optimizer_idx == 1:
-            # second pass for discriminator update
-            if cond is None:
-                logits_real = self.discriminator(inputs.contiguous().detach())
-                logits_fake = self.discriminator(reconstructions.contiguous().detach())
-            else:
-                logits_real = self.discriminator(torch.cat((inputs.contiguous().detach(), cond), dim=1))
-                logits_fake = self.discriminator(torch.cat((reconstructions.contiguous().detach(), cond), dim=1))
-
-            d_loss = self.disc_loss(logits_real, logits_fake)
-            log = {"disc_loss": d_loss.clone().detach().mean(),
-                   "logits_real": logits_real.detach().mean(),
-                   "logits_fake": logits_fake.detach().mean()
-                   }
-            return d_loss, log
-
-
-
 
 
 ############# use only gan after reconstruction
@@ -484,8 +366,8 @@ class LPIPSWithDiscriminator_decoder_only_gan(nn.Module):
         self.max_buff_len = 10000
         
     def disc_loss(self, logits_real, logits_fake):
-        loss_real = torch.mean(1. - logits_real) ### pixel>1的都为0, 希望logits_real越小越好
-        loss_fake = torch.mean(1. + logits_fake) ### pixel<-1的都为0, 希望logits_fake越大越好
+        loss_real = torch.mean(1. - logits_real) 
+        loss_fake = torch.mean(1. + logits_fake) 
         d_loss = 0.5 * (loss_real + loss_fake)
         return d_loss
 
@@ -612,8 +494,8 @@ class LPIPSWithDiscriminator_decoder_only_gan_condition(nn.Module):
 
         
     def disc_loss(self, logits_real, logits_fake):
-        loss_real = torch.mean(1. - logits_real) ### pixel>1的都为0, 希望logits_real越小越好
-        loss_fake = torch.mean(1. + logits_fake) ### pixel<-1的都为0, 希望logits_fake越大越好
+        loss_real = torch.mean(1. - logits_real) 
+        loss_fake = torch.mean(1. + logits_fake) #
         d_loss = 0.5 * (loss_real + loss_fake)
         return d_loss
 
@@ -694,9 +576,9 @@ class LPIPSWithDiscriminator_decoder_only_gan_condition(nn.Module):
             else:
                 
                 logits_fake = self.discriminator(reconstructions.contiguous(), cond.contiguous())
-                g_loss = -torch.mean(logits_fake) #### 判别器的损失
+                g_loss = -torch.mean(logits_fake) 
 
-                ##### 如果有惩罚项
+                ##### 
                 if self.if_penalize>0:
                     logits_real = self.discriminator(inputs.contiguous(), cond.contiguous())
                     penalize_loss = self.mseloss(logits_fake,logits_real)
@@ -863,10 +745,3 @@ class LPIPSWithDiscriminator_decoder_only_finetune(nn.Module):
                    }
             return d_loss, log
 
-if __name__ == "__main__":
-    D_net = LitevaeWithDiscriminator(disc_start=1, kl_weight=1e-5, disc_weight=0.5)
-    input  = torch.rand((2,3,512,512))
-    dec = torch.rand((2,3,512,512))
-    from diffusers.models.autoencoders.vae import DiagonalGaussianDistribution
-    posteriors = DiagonalGaussianDistribution(input)
-    loss, log = D_net(input, dec, posteriors, optimizer_idx = 0, global_step=25)

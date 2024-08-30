@@ -2,21 +2,8 @@
 #!/usr/bin/env python
 # coding=utf-8
 """ 
-finetune tinyvae with lpips_loss + dino gan + latent degrade
+train tinyvae with lpips_loss + dino gan + latent degrade
 """
-import sys
-if sys.version_info < (3, 8):
-    import importlib_metadata
-else:
-    import importlib.metadata as importlib_metadata
-old_metadata = importlib_metadata.metadata
-
-def new_metadata(name):
-    if name == 'wandb':
-        name =  'byted-wandb'
-    return old_metadata(name)
-
-importlib_metadata.metadata = new_metadata
 import argparse
 from glob import glob
 import logging
@@ -57,7 +44,6 @@ from diffusers.utils.import_utils import is_xformers_available
 from compression.optimize_vae.models.autoencoder_kl import AutoencoderKL
 from compression.optimize_vae.models.autoencoder_tiny import AutoencoderTiny, AutoencoderTinyWS
 from compression.optimize_vae.dino import TinyVaeDino
-# from compression.optimize_vae.contperceptual import LPIPSWithDiscriminatorTiny
 from compression.prune_sd.calflops import calculate_flops
 
 from compression.optimize_vae.webdata_laion import WebDataset

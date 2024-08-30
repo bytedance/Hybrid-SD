@@ -4,8 +4,7 @@ import torch.nn.functional as F
 import torch.utils.checkpoint
 import torchvision.transforms.functional as TF
 import os
-import sys
-sys.path.insert(0, "/usr/local/lib/python3.9/dist-packages")
+
 import diffusers
 from diffusers import (
     AutoencoderKL,
@@ -18,7 +17,6 @@ from compression.prune_sd.models.unet_2d_condition import UNet2DConditionModel a
 from diffusers.utils.import_utils import is_xformers_available
 
 from compression.prune_sd.LCM.Scheduling_LCM import LCMScheduler
-#from compression.hybrid_sd.diffusers.pipeline_stable_diffusion import StableDiffusionPipeline
 from compression.hybrid_sd.diffusers.pipline_hybrid_LCM import StableDiffusionPipeline
 from compression.prune_sd.calflops import calculate_flops
 
@@ -78,23 +76,9 @@ def log_validation(vae, unet, scheduler_path, device, weight_dtype, step=4, seed
     return image_logs
     
 if __name__=="__main__":
-    # SD1.5
-    # SD15_path = "/mnt/bn/bytenn-yg2/pretrained_models/runwayml--stable-diffusion-v1-5"
-    # vae = AutoencoderKL.from_pretrained(
-    #     SD15_path,
-    #     subfolder="vae",
-    # )
-    # # loading SD1.5 LCM model
-    # LCM_SD_path = "results/lcm_sd15_2w/checkpoint-20000"
-    # save_path = "results/lcm_sd15_2w/infer_imgs/"
-    # unet = UNet2DConditionModel.from_pretrained(
-    #     LCM_SD_path, subfolder="unet",
-    # )
-    # log_validation(vae, unet, SD15_path, device="cuda:0", weight_dtype=torch.float32, step=8, seed=1234, save_path=save_path)
-    
-    
+
     # SD1.4 
-    SD14_path = "/mnt/bn/bytenn-yg2/pretrained_models/CompVis--stable-diffusion-v1-4"
+    SD14_path = "pretrained_models/CompVis--stable-diffusion-v1-4"
     vae = AutoencoderKL.from_pretrained(
         SD14_path,
         subfolder="vae",
@@ -129,20 +113,4 @@ if __name__=="__main__":
     }
     total_macs = macs * 8
     print(f'Model{model_name}, #Params: {params/1e6:2f} M, MACs: {macs/1e9:.2f} G, Total Macs: {total_macs/1e12:.2f} T')
-    
-    import pdb;pdb.set_trace()
-    
-    # loading Tiny model
-    # SD14_path = "/mnt/bn/bytenn-yg2/pretrained_models/CompVis--stable-diffusion-v1-4"
-    # vae = AutoencoderKL.from_pretrained(
-    #     SD14_path,
-    #     subfolder="vae",
-    # )
-    # Tiny_LCM_path = "results/nota-ai--bk-sdm-tiny_LCM/checkpoint-20000"
-    # save_path = "results/nota-ai--bk-sdm-tiny_LCM/infer_imgs/"
-    # unet = CustomUNet2DConditionModel.from_pretrained(
-    #     Tiny_LCM_path, subfolder="unet_target" #, revision=args.non_ema_revision
-    # )
-    
-    # log_validation(vae, unet, SD14_path, device="cuda:0", weight_dtype=torch.float32, step=8, seed=1234, save_path=save_path)
     

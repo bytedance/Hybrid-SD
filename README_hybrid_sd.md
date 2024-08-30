@@ -116,7 +116,7 @@ bash scripts/prune_sd/gen_latent.sh
 
 2. Then we analyze the score of each candidate pruning layer. We will get the `score.pkl` using the following code. 
 ```python3
-python3 notebooks/analysis/analyze_score_v2.py
+python3 notebooks/analysis/analyze_score.py
 ```
 
 3. Prune the U-Net based on the calculated `score.pkl`

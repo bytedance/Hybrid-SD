@@ -12,19 +12,11 @@
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
-import sys
-if sys.version_info < (3, 8):
-    import importlib_metadata
-else:
-    import importlib.metadata as importlib_metadata
-old_metadata = importlib_metadata.metadata
+ 
 
-def new_metadata(name):
-    if name == 'wandb':
-        name =  'byted-wandb'
-    return old_metadata(name)
+ 
 
-importlib_metadata.metadata = new_metadata
+ 
 
 import argparse
 import functools

@@ -1131,10 +1131,6 @@ def test_encoder():
 def test_vae_params():
 ##### test vae ####
     x = torch.randn((2,3,512,512)).cuda()
-    #vae_config = LiteVAE.load_config("/mnt/bn/bytenn-yg2/liuhj/bytenn_diffusion_tools/compression/optimize_vae/models/litevae")
-    #vae = LiteVAE.from_config(vae_config).cuda()
-    # vae_config = AutoencoderKL.load_config("/mnt/bn/bytenn-yg2/pretrained_models/runwayml--stable-diffusion-v1-5/vae")
-    # vae = AutoencoderKL.from_config(vae_config).cuda()
     vae_config = LiteTinyVAE.load_config("")
 
     rec = vae(x)
