@@ -148,13 +148,13 @@ bash scripts/optimize_vae/train_tinyvae.sh
 ## Training LCMs
 Training accelerated Latent consistency models (LCM) using the following scripts.
 
-- ### **Distilling SD models to LCMs**
+### **1. Distilling SD models to LCMs**
 Using the following scripts to distill SD models to LCMs.
 ```bash
 bash scripts/hybrid_sd/lcm_t2i_sd.sh
 ```
 
-- ### **Distilling Pruned SD models to LCMs**
+### **2. Distilling Pruned SD models to LCMs**
 Use the following scripts to distill our pruned tiny SD models to LCMs.
 ```bash
 bash scripts/hybrid_sd/lcm_t2i_tiny.sh
@@ -164,10 +164,9 @@ bash scripts/hybrid_sd/lcm_t2i_tiny.sh
 
 
 
-### Replacing the VAE with our lightweight VAE
 
 
-### Evaluation on MS-COCO Benchmark
+## Evaluation on MS-COCO Benchmark
 
 1. Evaluate hybrid inference with the large model SD-v1.4 and the small model our tiny U-Net on MS-COCO 2014 30K.
 ```bash

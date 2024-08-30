@@ -17,11 +17,11 @@ logger = logging.getLogger(__name__)
 
 def parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--model_id", type=str, default="/mnt/bn/bytenn-yg2/pretrained_models/nota-ai--bk-sdm-small")    
+    parser.add_argument("--model_id", type=str, default="pretrained_models/nota-ai--bk-sdm-small")    
     parser.add_argument("--save_dir", type=str, default="./results/debug",
                         help="$save_dir/{im256, im512} are created for saving 256x256 and 512x512 images")
     parser.add_argument("--unet_path", type=str, default=None)
-    parser.add_argument("--data_list", type=str, default="/mnt/bn/ycq-lq/data/mscoco_val2014_30k/metadata.csv")    
+    parser.add_argument("--data_list", type=str, default="data/mscoco_val2014_30k/metadata.csv")    
     parser.add_argument("--num_images", type=int, default=1)
     parser.add_argument("--num_inference_steps", type=int, default=25)
     parser.add_argument('--device', type=str, default='cuda:0', help='Device to use, cuda:gpu_number or cpu')

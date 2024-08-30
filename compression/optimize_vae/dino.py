@@ -5,7 +5,6 @@ import random
 from taming.modules.losses.vqperceptual import *  # TODO: taming dependency yes/no?
 from torchvision.transforms import  GaussianBlur
 import torch.nn.functional as F 
-from compression.optimize_vae.models.litevae.wavelet import  DWTH
 from torch.nn.utils import spectral_norm
 from publics.stylegant.networks.discriminator import VAEDiscrminator
 

@@ -84,9 +84,9 @@ def log_validation(vae, unet, scheduler_path, device, weight_dtype, step=4, seed
     
 if __name__=="__main__":
     # SDXL
-    SDXL_path = "/mnt/bn/bytenn-yg2/pretrained_models/stabilityai--stable-diffusion-xl-base-1.0"
+    SDXL_path = "pretrained_models/stabilityai--stable-diffusion-xl-base-1.0"
     save_path = "results/sdxl_base/infer_imgs_sdxl/"
-    #PX_path = "/mnt/bn/bytenn-yg2/pretrained_models/PixArt-alpha--PixArt-Sigma-XL-2-1024-MS"
+
     vae = AutoencoderKL.from_pretrained(
         SDXL_path,
         subfolder="vae",

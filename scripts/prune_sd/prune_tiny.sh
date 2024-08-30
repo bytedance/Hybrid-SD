@@ -6,7 +6,8 @@ DATA_ROOT=/mnt/bn/bytenn-yg2/datasets
 
 
 
-
+# a, b means using different pruning ratios for layer_id
+# we use a,b to split layer_ids into (0, a), (a, b) and (b, last_layer) and assign them different pruning ratios
 
 a=19
 b=21
