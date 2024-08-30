@@ -6,8 +6,8 @@ GPU_NUM=1
 
 # Hybrid inference with LCM models
 MODEL_LARGE=runwayml--stable-diffusion-v1-4
-PATH_MODEL_LARGE="/mnt/bn/bytenn-yg2/liuhj/hybrid_sd/bytenn_diffusion_tools/results/lcm_sd14_2w/checkpoint-20000"
-PATH_MODEL_SMALL=/mnt/bn/bytenn-yg2/liuhj/hybrid_sd/bytenn_diffusion_tools/results/nota-ai--bk-sdm-tiny_LCM/checkpoint-20000
+PATH_MODEL_LARGE="results/lcm_sd14_2w/checkpoint-20000"
+PATH_MODEL_SMALL="results/lcm_ours_tiny_sd14/checkpoint-20000"
 step_list=("0,8" "4,4"  "8,0")
 
 

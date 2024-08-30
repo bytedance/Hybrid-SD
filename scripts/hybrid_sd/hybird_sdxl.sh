@@ -1,10 +1,10 @@
 export PYTHONPATH='.'
-MODEL_ROOT=/mnt/bn/bytenn-yg2/pretrained_models
+MODEL_ROOT=pretrained_models
 MODEL_LARGE=stabilityai--stable-diffusion-xl-base-1.0
 MODEL_SMALL=koala-700m
 
 PATH_MODEL_LARGE=$MODEL_ROOT/$MODEL_LARGE
-PATH_MODEL_SMALL=/mnt/bn/bytenn-yg2/pretrained_models/koala-700m
+PATH_MODEL_SMALL=pretrained_models/koala-700m
 GPU_NUM=1
 
 

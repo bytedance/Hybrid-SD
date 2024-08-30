@@ -1,10 +1,10 @@
 export PYTHONPATH='.'
-MODEL_ROOT=/mnt/bn/bytenn-yg2/pretrained_models
+MODEL_ROOT=pretrained_models
 MODEL_LARGE=CompVis--stable-diffusion-v1-4
 MODEL_SMALL=nota-ai--bk-sdm-tiny
 
 PATH_MODEL_LARGE=$MODEL_ROOT/$MODEL_LARGE
-PATH_MODEL_SMALL=/mnt/bn/bytenn-yg2/liuhj/hybrid_sd/bytenn_diffusion_tools/results/ours_tiny/a19_b21/checkpoint-50000
+PATH_MODEL_SMALL=results/ours_tiny/a19_b21/checkpoint-50000 # path to our tiny model
 
 GPU_NUM=1
 

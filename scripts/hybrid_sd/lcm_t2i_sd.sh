@@ -2,8 +2,8 @@ export PYTHONPATH='.'
 
 
 
-MODEL_DIR="/mnt/bn/bytenn-yg2/pretrained_models/CompVis--stable-diffusion-v1-4"
-TRAIN_DATA_DIR="/mnt/bn/bytenn-yg2/datasets/laion2b_en_aesthetics/data"
+MODEL_DIR="pretrained_models/CompVis--stable-diffusion-v1-4"
+TRAIN_DATA_DIR="datasets/laion2b_en_aesthetics/data"
 OUTPUT_DIR="results/lcm_sd14_2w_new" # please adjust it if needed
 
 BATCH_SIZE=12

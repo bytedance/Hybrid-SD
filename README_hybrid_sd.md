@@ -163,14 +163,6 @@ bash scripts/hybrid_sd/lcm_t2i_tiny.sh
 
 
 
-## Results
-<div align="center">
-<a>
-<img src="assets/visual_sdxl.png"   height="400" /> 
-
-</a>
-</div>
-
 
 ### Replacing the VAE with our lightweight VAE
 
@@ -186,3 +178,12 @@ bash scripts/hybrid_sd/generate_dpm_eval.sh
 ```bash
 bash scripts/hybrid_sd/generate_lcm_eval.sh
 ```
+
+
+## Results
+<div align="center">
+<a>
+<img src="assets/visual_sdxl.png"   height="400" /> 
+
+</a>
+</div>

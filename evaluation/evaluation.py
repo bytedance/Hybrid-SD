@@ -22,7 +22,7 @@ import time
 import gc
 from compression.prune_sd.calflops.flops_counter import calculate_flops
 import torchvision.transforms.functional as TF
-# export http_proxy=http://bj-rd-proxy.byted.org:3128  https_proxy=http://bj-rd-proxy.byted.org:3128 no_proxy=code.byted.org
+
 # huggingface-cli login
 # python3 -m pip install clean-fid,torchmetrics
 

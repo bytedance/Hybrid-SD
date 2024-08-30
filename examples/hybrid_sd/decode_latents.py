@@ -6,24 +6,22 @@ import os
 from torch.utils.data import Dataset, DataLoader
 from PIL import Image
 # tiny vae
-path = "/mnt/bn/bytenn-yg2/liuhj/bytenn_diffusion_tools/outputs/ours_edge_vae/combine_45k_pixelfilter/taesd_config.json"
-chk_path = "/mnt/bn/bytenn-yg2/liuhj/bytenn_diffusion_tools/outputs/ours_edge_vae/combine_45k_pixelfilter/fintune_dino_combine_pixelfilter-checkpoint-45000-vae.bin"
-#chk_path = "/mnt/bn/bytenn-yg2/pretrained_models/madebyollin--taesd/diffusion_pytorch_model.bin"
+path = ""
+chk_path = ""
+
 vae_config = AutoencoderTiny.load_config(path)
 vae = AutoencoderTiny.from_config(vae_config).eval()
 vae.load_state_dict(torch.load(chk_path), strict=True)
-#vae = AutoencoderTiny.from_pretrained("/mnt/bn/bytenn-yg2/pretrained_models/madebyollin--taesd")
 
-#vae = AutoencoderKL.from_pretrained("/mnt/bn/bytenn-yg2/pretrained_models/CompVis--stable-diffusion-v1-4/vae").eval()
 
 
 vae = vae.to(torch.float16).cuda()
 
 # decoding loop
 
-pt_paths = ["/mnt/bn/bytenn-yg2/liuhj/hybrid_sd/bytenn_diffusion_tools/results/HybridSD_LCM_guidance7_ours_Tiny_scale/SD14_LCM-ours-tiny_lcm-0,8/im512",
-           "/mnt/bn/bytenn-yg2/liuhj/hybrid_sd/bytenn_diffusion_tools/results/HybridSD_LCM_guidance7_ours_Tiny_scale/SD14_LCM-ours-tiny_lcm-4,4/im512",
-           "/mnt/bn/bytenn-yg2/liuhj/hybrid_sd/bytenn_diffusion_tools/results/HybridSD_LCM_guidance7_ours_Tiny_scale/SD14_LCM-ours-tiny_lcm-8,0/im512"
+pt_paths = ["results/HybridSD_LCM_guidance7_ours_Tiny_scale/SD14_LCM-ours-tiny_lcm-0,8/im512",
+           "results/HybridSD_LCM_guidance7_ours_Tiny_scale/SD14_LCM-ours-tiny_lcm-4,4/im512",
+           "results/HybridSD_LCM_guidance7_ours_Tiny_scale/SD14_LCM-ours-tiny_lcm-8,0/im512"
            ]
 
 class TensorDataset(Dataset):

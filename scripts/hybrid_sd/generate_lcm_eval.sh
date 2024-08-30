@@ -1,9 +1,7 @@
-export http_proxy=http://sys-proxy-rd-relay.byted.org:8118 https_proxy=http://sys-proxy-rd-relay.byted.org:8118 no_proxy=.byted.org 
-
 export PYTHONPATH='.'
 
-DATA_ROOT=/mnt/bn/bytenn-yg2/datasets
-MODEL_ROOT=/mnt/bn/bytenn-yg2/pretrained_models
+DATA_ROOT=datasets
+MODEL_ROOT=pretrained_models
 
 
 TEACHER_MODEL=CompVis--stable-diffusion-v1-4
@@ -12,9 +10,9 @@ MODEL_LARGE=SD14_LCM
 MODEL_SMALL=ours-tiny_lcm
 
 
-PATH_TEACHER_MODEL=$MODEL_ROOT/$TEACHER_MODEL
-PATH_MODEL_LARGE=/mnt/bn/bytenn-yg2/liuhj/hybrid_sd/bytenn_diffusion_tools/results/lcm_sd14_2w/checkpoint-20000 #results/lcm_sd14_2w/checkpoint-20000
-PATH_MODEL_SMALL=/mnt/bn/bytenn-yg2/liuhj/hybrid_sd/bytenn_diffusion_tools/results/lcm_ours_tiny_sd14/checkpoint-20000  #results/lcm_ours_tiny_sd14/checkpoint-20000
+PATH_TEACHER_MODEL=$MODEL_ROOT/$TEACHER_MODEL  # path to the teacher SD model (e.g., SD-v1.4)
+PATH_MODEL_LARGE=results/lcm_sd14_2w/checkpoint-20000 
+PATH_MODEL_SMALL=results/lcm_ours_tiny_sd14/checkpoint-20000  
 
 
 

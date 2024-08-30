@@ -1,6 +1,3 @@
-
-export http_proxy=http://sys-proxy-rd-relay.byted.org:8118 https_proxy=http://sys-proxy-rd-relay.byted.org:8118 no_proxy=.byted.org 
-
 export PYTHONPATH='.'
 
 MODEL_ID=/mnt/bn/bytenn-lq2/pretrained_models/SG161222--Realistic_Vision_V5.1_noVAE

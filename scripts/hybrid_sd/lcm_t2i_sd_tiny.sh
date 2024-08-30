@@ -1,25 +1,13 @@
-export http_proxy=http://sys-proxy-rd-relay.byted.org:8118 https_proxy=http://sys-proxy-rd-relay.byted.org:8118 no_proxy=.byted.org 
 export PYTHONPATH='.'
 
 
-### laion-art datasets
-### CompVis/stable-diffusion-v1-4 nota-ai/bk-sdm-small-2m nota-ai/bk-sdm-tiny-2m
-### SG161222/Realistic_Vision_V4.0 segmind/small-sd segmind/tiny-sd
-# MODEL_NAME="SG161222/Realistic_Vision_V5.1_noVAE"
-#MODEL_NAME="nota-ai/bk-sdm-small"
-# TRAIN_DATA_DIR="/mnt/bn/bytenn-data2/laion-art" # please adjust it if needed
-# MODEL_DIR="/mnt/bn/bytenn-yg2/pretrained_models/runwayml--stable-diffusion-v1-5"
-MODEL_DIR="/mnt/bn/bytenn-yg2/pretrained_models/CompVis--stable-diffusion-v1-4"
-#MODEL_DIR="/mnt/bn/bytenn-yg2/pretrained_models/nota-ai--bk-sdm-tiny"
-TRAIN_DATA_DIR="/mnt/bn/bytenn-yg2/datasets/laion2b_en_aesthetics/data"
 
-#STUDENT_DIR="/mnt/bn/bytenn-yg2/liuhj/hybrid_sd/bytenn_diffusion_tools/results/NaivePrune/bk-sdm-tiny/prune_combined_v2/a10_b20"
-#STUDENT_DIR="results/finetune/NaivePrune/a19_b21/unet_finetuned/2024-08-01-20-43-15"
-#STUDENT_DIR="/mnt/bn/bytenn-yg2/ycq/workspace/bytenn_diffusion_tools/results/NaivePrune/bk-sdm-tiny/a19_b21/checkpoint-50000"
-STUDENT_DIR="/mnt/bn/bytenn-yg2/ycq/workspace/bytenn_diffusion_tools/results/NaivePrune_SD14/bk-sdm-tiny/prune_combined_v2/a19_b21/2024-05-15-22-00-19/checkpoint-50000"
-#STUDENT_DIR="/mnt/bn/bytenn-yg2/pretrained_models/nota-ai--bk-sdm-tiny"
-#'/mnt/bn/bytenn-yg2/datasets/laion2b_en_aesthetics/data'        #'/mnt/bn/bytenn-yg2/datasets/laion_aes/preprocessed_11k' \
-#OUTPUT_DIR="results/ours_tiny/lcm_a19_b21_tiny_teacher" # please adjust it if needed
+MODEL_DIR="pretrained_models/CompVis--stable-diffusion-v1-4"
+TRAIN_DATA_DIR="datasets/laion2b_en_aesthetics/data"
+
+
+STUDENT_DIR="results/NaivePrune_SD14/bk-sdm-tiny/" # path to the finetuned tiny model
+
 
 OUTPUT_DIR="results/lcm_sd14_ours_224_tiny_teacher"
 BATCH_SIZE=12

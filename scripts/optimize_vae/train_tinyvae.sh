@@ -2,7 +2,6 @@
 NUM_GPUS=2
 BATCH_SIZE=24
 ACC_STEPS=2
-export http_proxy=http://sys-proxy-rd-relay.byted.org:8118 https_proxy=http://sys-proxy-rd-relay.byted.org:8118 no_proxy=.byted.org
 
 
 CUDA_VISIBLE_DEVICES=6,7 accelerate launch --multi_gpu --num_processes ${NUM_GPUS} --main_process_port 23333 \
@@ -22,14 +21,14 @@ CUDA_VISIBLE_DEVICES=6,7 accelerate launch --multi_gpu --num_processes ${NUM_GPU
     --checkpointing_steps 1000 \
     --resolution 512 \
     --mixed_precision no \
-    --train_data_dir /mnt/bn/bytenn-yg2/datasets/Laion_aesthetics_5plus_1024_33M/Laion33m_data_test \
-    --pretrained_model_name_or_path "/mnt/bn/bytenn-yg2/pretrained_models/runwayml--stable-diffusion-v1-5"  \
-    --student_model_name_or_path  "/mnt/bn/bytenn-yg2/pretrained_models/madebyollin--taesd"  \
+    --train_data_dir datasets/Laion_aesthetics_5plus_1024_33M/Laion33m_data_test \
+    --pretrained_model_name_or_path "pretrained_models/runwayml--stable-diffusion-v1-5"  \
+    --student_model_name_or_path  "pretrained_models/madebyollin--taesd"  \
     --experiment_name fintune_dino_combine_pixelfilter \
     --disc_start 5000 \
     --add_lq_input True \
-    --visual_path /mnt/bn/bytenn-yg2/datasets/taesd_visual \
-    --real_path /mnt/bn/bytenn-yg2/datasets/coco2017_resize \
+    --visual_path datasets/taesd_visual \
+    --real_path datasets/coco2017_resize \
     --report_to wandb
 
 

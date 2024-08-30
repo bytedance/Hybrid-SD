@@ -1,6 +1,3 @@
-
-export http_proxy=http://sys-proxy-rd-relay.byted.org:8118 https_proxy=http://sys-proxy-rd-relay.byted.org:8118 no_proxy=.byted.org 
-
 export PYTHONPATH='.'
 
 # SG161222/Realistic_Vision_V4.0 segmind/small-sd segmind/tiny-sd

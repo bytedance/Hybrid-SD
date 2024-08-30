@@ -1,10 +1,7 @@
-
-export http_proxy=http://sys-proxy-rd-relay.byted.org:8118 https_proxy=http://sys-proxy-rd-relay.byted.org:8118 no_proxy=.byted.org 
-
 export PYTHONPATH='.'
 
-DATA_ROOT=/mnt/bn/bytenn-yg2/datasets
-MODEL_ROOT=/mnt/bn/bytenn-yg2/pretrained_models
+DATA_ROOT=datasets
+MODEL_ROOT=pretrained_models
 # DATA_ROOT=./datasets
 # MODEL_ROOT=./pretrained_models
 # MODEL_LARGE=SG161222--Realistic_Vision_V5.1_noVAE
@@ -13,13 +10,12 @@ MODEL_LARGE=CompVis--stable-diffusion-v1-4
 # MODEL_LARGE=runwayml--stable-diffusion-v1-5
 # MODEL_SMALL=nota-ai--bk-sdm-small
 # MODEL_SMALL=nota-ai--bk-sdm-tiny
-# MODEL_SMALL=tea_sd14_tiny_a9_b17
 MODEL_SMALL=a19_b21_oursTiny
 
 PATH_MODEL_LARGE=$MODEL_ROOT/$MODEL_LARGE
 PATH_MODEL_SMALL=$MODEL_ROOT/$MODEL_SMALL
 
-PATH_MODEL_SMALL=/mnt/bn/bytenn-yg2/ycq/workspace/bytenn_diffusion_tools/results/NaivePrune_SD14/bk-sdm-tiny/prune_combined_v2/a19_b21/2024-05-15-22-00-19/checkpoint-50000
+PATH_MODEL_SMALL=results/NaivePrune/bk-sdm-tiny/prune_oneshot/a19_b21/unet   # path to the finetuned small model
 
 
 GPU_NUM=0
