@@ -133,41 +133,10 @@ def inference_gen_dir_gpu(args):
         ####### sd1.5 fp16, 没有黑图
         weight_dtype = torch.float16
         from compression.optimize_vae.models.autoencoder_kl import AutoencoderKL
-        model = AutoencoderKL.from_pretrained('/mnt/bn/bytenn-yg2/pretrained_models/runwayml--stable-diffusion-v1-5', subfolder="vae",torch_dtype=weight_dtype).eval()
+        model = AutoencoderKL.from_pretrained('pretrained_models/runwayml--stable-diffusion-v1-5', subfolder="vae",torch_dtype=weight_dtype).eval()
         print(20*'#' + 'loading model : this is AutoencoderKL {}'.format(str(weight_dtype)))
 
-        ####### sd1.5 fp32, 没有黑图
-        # weight_dtype = torch.float32
-        # from compression.optimize_vae.models.autoencoder_kl import AutoencoderKL
-        # model = AutoencoderKL.from_pretrained('/mnt/bn/bytenn-yg2/pretrained_models/runwayml--stable-diffusion-v1-5', subfolder="vae",torch_dtype=weight_dtype).eval()
-        # print(20*'#' + 'loading model : this is AutoencoderKL {}'.format(str(weight_dtype)))
-
-
-        ####### sdxl fp32, 没有黑图
-        # weight_dtype = torch.float32
-        # from diffusers import DiffusionPipeline
-        # base = DiffusionPipeline.from_pretrained(
-        #     "stabilityai/stable-diffusion-xl-base-1.0", torch_dtype=weight_dtype, variant="fp16", use_safetensors=True)
-        # model = base.vae.eval()
-        # print(20*'#' + 'loading model : this is AutoencoderKL XL {}'.format(str(weight_dtype)))
-
-
-        ####### sdxl fp16
-        # from diffusers import DiffusionPipeline, AutoencoderKL
-        # weight_dtype = torch.float16
-        # model = AutoencoderKL.from_pretrained("madebyollin/sdxl-vae-fp16-fix", torch_dtype=weight_dtype).eval()
-        # print(20*'#' + 'loading model : this is AutoencoderKL XL refine {}'.format(str(weight_dtype)))
-
-
-        ####### taesd fp32
-        # from diffusers import AutoencoderTiny
-        # model = AutoencoderTiny.from_pretrained("madebyollin/taesd", torch_dtype=weight_dtype).eval()  #to(torch.float16)
-        # print(20*'#' + 'loading model : this is AutoencoderTiny {}'.format(str(weight_dtype)))
-    elif args.model_name == "litevae":
-        from compression.optimize_vae.models.litevae_kl import  LiteVAE
-        vae_config = LiteVAE.load_config(os.path.join(args.pretrained_model_name_or_path, "config.json"))
-        model = LiteVAE.from_config(vae_config).eval()
-        model.load_state_dict(torch.load(os.path.join(args.pretrained_model_name_or_path, args.ckpt_name)), strict=True)
+     
     elif args.model_name == "tinyvae":
         from compression.optimize_vae.models.autoencoder_tiny import AutoencoderTiny
         tinyvae_config = AutoencoderTiny.load_config(os.path.join(args.pretrained_model_name_or_path, "config.json"))
@@ -193,14 +162,6 @@ def inference_gen_dir_gpu(args):
         shutil.rmtree(args.input_root_gen)
     os.makedirs(args.input_root_gen)
 
-    # if os.path.isdir(args.input_root_encoder):
-    #     shutil.rmtree(args.input_root_encoder)
-    # os.makedirs(args.input_root_encoder)
-
-    # if os.path.isdir(args.input_root_rec):
-    #     shutil.rmtree(args.input_root_rec)
-    # os.makedirs(args.input_root_rec)
-
     a = time.time()
     transform_func = transform
     with torch.inference_mode():
@@ -216,7 +177,7 @@ def inference_gen_dir_gpu(args):
                 # laji = data.type(torch.HalfTensor).to(device,dtype = torch.HalfTensor)
                 # model.module.half()(laji)
                 data = data.to(device,dtype=weight_dtype)
-                #res_decoder = (model.module(data)['sample'].add(1)).mul(127.5).clamp(0, 255).cpu().byte()  # lhj tiny from scratch style
+                #res_decoder = (model.module(data)['sample'].add(1)).mul(127.5).clamp(0, 255).cpu().byte()  #  tiny from scratch style
                 res_decoder = model.module(data)['sample'].mul(255).clamp(0, 255).cpu().byte()  #original
                 # res_encoder = model.module.encode(data).latent_dist.sample()
                 # res_decoder = model.module.decode(res_encoder).sample.mul(255).clamp(0, 255).cpu().byte()
@@ -224,24 +185,16 @@ def inference_gen_dir_gpu(args):
                 end = batch_id*batch_size+batch_size if (batch_id*batch_size+batch_size)<=len(img_list) else len(img_list)
                 data_files = img_list[batch_id*batch_size:end]
                 for i in range(len(data_files)):
-                    ### encoder的img
+                    ### encoder img
                     # save_path_encoder= os.path.join(args.input_root_encoder,data_files[i].split('/')[-1])
                     # img = res_encoder_to_img[i]
                     # TF.to_pil_image(img).convert('RGB').save(save_path_encoder)
 
-                    ### decoder的img
+                    ### decoder img
                     save_path_final = os.path.join(args.input_root_gen,data_files[i].split('/')[-1])
                     img = res_decoder[i]
                     TF.to_pil_image(img).convert('RGB').save(save_path_final)
 
-                    ### decode resize成encoder输出的img
-                    # save_path_decoder_resize = os.path.join(args.input_root_rec,data_files[i].split('/')[-1])
-                    # resize_shape = res_encoder.shape[-1]
-                    # decoder_trans_img = transforms.Resize((resize_shape,resize_shape),interpolation=transforms.InterpolationMode.BILINEAR)(res_decoder[i])
-                    # TF.to_pil_image(decoder_trans_img).convert('RGB').save(save_path_decoder_resize)
-                    # save_path = os.path.join('/mnt/bn/bytenn-yg2/pxr/bytenn_diffusion_tools/evaluation/coco2017/sdxl/val2017_resize_256',data_files[i].split('/')[-1])
-                    # img = data[i]
-                    # TF.to_pil_image(img).convert('RGB').save(save_path)
 
 
 
@@ -399,19 +352,14 @@ if __name__ == "__main__":
     import os
     import pdb
     import numpy as np
-    # if os.path.isdir('/mnt/bn/bytenn-yg2/pxr/bytenn_diffusion_tools/evaluation/coco2017/sdxl/val2017_resize_256'):
-    #     shutil.rmtree('/mnt/bn/bytenn-yg2/pxr/bytenn_diffusion_tools/evaluation/coco2017/sdxl/val2017_resize_256')
-    # os.makedirs('/mnt/bn/bytenn-yg2/pxr/bytenn_diffusion_tools/evaluation/coco2017/sdxl/val2017_resize_256')
     def str2bool(str):
         return True if str.lower() == 'true' else False 
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("--pretrained_model_name_or_path", type=str ,default ='outputs/vae_decoder_only_l1-pruner_ratio-0.5',help='For pruner model only')  #/mnt/bn/bytenn-yg2/pxr/bytenn_diffusion_tools
+    parser.add_argument("--pretrained_model_name_or_path", type=str ,default ='outputs/vae_decoder_only_l1-pruner_ratio-0.5',help='For pruner model only')  
     parser.add_argument("--input_dir", type=str ,default ='evaluation/coco2017/sdxl',help='directory stored generated image directory')
-    parser.add_argument("--input_root_real", type=str ,default ='/mnt/bn/bytenn-yg2/datasets/coco2017_resize',help='real image directory')
+    parser.add_argument("--input_root_real", type=str ,default ='datasets/coco2017_resize',help='real image directory')
     parser.add_argument("--input_root_gen", type=str, default ='evaluation/coco2017/sdxl/val2017_resize_gen',help='generated image directory')
-    # parser.add_argument("--input_root_encoder", type=str, default ='/mnt/bn/bytenn-yg2/pxr/bytenn_diffusion_tools/evaluation/coco2017/val2017_resize_encoder')
-    # parser.add_argument("--input_root_rec", type=str, default ='/mnt/bn/bytenn-yg2/pxr/bytenn_diffusion_tools/evaluation/coco2017/val2017_resize_decoder_rec')
     parser.add_argument("--if_baseline", type=str2bool, default = True ,help='if model is after-pruned model')
     parser.add_argument("--model_name", type=str, default =None, help='vae model name')
     parser.add_argument("--ckpt_name", type=str, default =None, help='model ckpt name')
@@ -421,7 +369,6 @@ if __name__ == "__main__":
     parser.add_argument("--if_fp16", type=bool, default=True)
     args = parser.parse_args()
 
-    # args.input_root_real = '/mnt/bn/bytenn-yg2/pxr/bytenn_diffusion_tools/evaluation/coco2017/val2017_resize_5' 
 
 
     ################ sd1.5,fp16

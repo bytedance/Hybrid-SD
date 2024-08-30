@@ -15,8 +15,8 @@ import pickle
 
 def parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--model_id", type=str, default="pretrained_models/nota-ai--bk-sdm-small")    
-    parser.add_argument("--base_arch", type=str, default="bk-sdm-small")    
+    parser.add_argument("--model_id", type=str, default="pretrained_models/nota-ai--bk-sdm-tiny")    
+    parser.add_argument("--base_arch", type=str, default="bk-sdm-tiny")    
     parser.add_argument("--save_dir", type=str, default="./results/debug",
                         help="$save_dir/{im256, im512} are created for saving 256x256 and 512x512 images")
     parser.add_argument("--unet_path", type=str, default=None)

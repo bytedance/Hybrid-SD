@@ -44,7 +44,7 @@ def downloads_stats(output_path):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--save_dir', type=str, default="/mnt/bn/bytenn-yg2/pxr/bytenn_diffusion_tools/evaluation/coco2017")   
+    parser.add_argument('--save_dir', type=str, default="evaluation/coco2017")   
     args = parser.parse_args()
 
     os.makedirs(args.save_dir, exist_ok=True)
@@ -53,5 +53,5 @@ def main():
           
 if __name__ == "__main__":
     main()
-# /mnt/bn/bytenn-yg2/pxr/bytenn_diffusion_tools/evaluation
+
 
