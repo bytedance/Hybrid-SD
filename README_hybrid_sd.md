@@ -17,7 +17,7 @@
 
 
 ## **Introduction**
-Hybrid SD is a novel framework designed for edge-cloud collaborative inference of Stable Diffusion Models. By integrating the superior large models on cloud servers and efficient small models on edge devices, Hybrid SD achieves state-of-the-art parameter efficency on edge devices with competitive visual quality.
+Hybrid SD is a novel framework designed for edge-cloud collaborative inference of Stable Diffusion Models. By integrating the superior large models on cloud servers and efficient small models on edge devices, Hybrid SD achieves state-of-the-art parameter efficiency on edge devices with competitive visual quality.
 
 ## Install
 conda create -n hybrid_sd python=3.9.2
@@ -26,14 +26,14 @@ conda activate hybrid_sd
 pip install -r requirements.txt
 ```
 
-## Usage
 
 
 
-### Hybrid Inference
+
+## Hybrid Inference
 
 - #### **SD Models**
-To use hybrid SD for inference, you can luanch the `scripts/hybrid_sd/hybird_sd.sh`, please specify the large model and small model.
+To use hybrid SD for inference, you can launch the `scripts/hybrid_sd/hybird_sd.sh`, please specify the large and small models.
 
 ```bash
 # scripts/hybrid_sd/hybird_sd.sh
@@ -62,24 +62,24 @@ done
 Optional arguments:
 - `PATH_MODEL_LARGE`: the large model path.
 - `PATH_MODEL_SMALL`: the small model path.
-- `--step`: the steps distributed to different models. (e.g., "10,15" means the first 10 steps is distributed to the large model, and the last 15 steps is shifted sto the small model.)
+- `--step`: the steps distributed to different models. (e.g., "10,15" means the first 10 steps are distributed to the large model, while the last 15 steps are shifted to the small model.)
 - `--seed`: the random seed. 
 - `--img_sz`: the image size.
 - `--prompts_file`: put prompts in the .txt file.
 - `--output_dir`: the output directory for saving generated images.
 
 
-For hybrid SD for SDXL models, please refer to `scripts/hybrid_sd/hybird_sdxl.sh` accordinly.
+For hybrid inference for SDXL models, please refer to `scripts/hybrid_sd/hybird_sdxl.sh` accordingly.
 
 - #### **Latent Consistency Models (LCMs)**
 
-To use hybrid SD for LCMs, you can luanch the `scripts/hybrid_sd/hybird_lcm.sh` and specify the large model and small model.
+To use hybrid SD for LCMs, you can launch the `scripts/hybrid_sd/hybird_lcm.sh` and specify the large model and small model.
 
 ```bash
 # scripts/hybrid_sd/hybird_lcm.sh
 MODEL_LARGE=runwayml--stable-diffusion-v1-4
-PATH_MODEL_LARGE="/mnt/bn/bytenn-yg2/liuhj/hybrid_sd/bytenn_diffusion_tools/results/lcm_sd14_2w/checkpoint-20000"
-PATH_MODEL_SMALL=/mnt/bn/bytenn-yg2/liuhj/hybrid_sd/bytenn_diffusion_tools/results/nota-ai--bk-sdm-tiny_LCM/checkpoint-20000
+PATH_MODEL_LARGE="results/lcm_sd14_2w/checkpoint-20000"
+PATH_MODEL_SMALL="results/nota-ai--bk-sdm-tiny_LCM/checkpoint-20000"
 step_list=("0,8" "4,4"  "8,0")
 
 
@@ -104,21 +104,48 @@ done
 
 
 
-### Pruning U-Net
+## Pruning U-Net
 
 
-- #### **Pruning U-Net through**
+- #### **Pruning U-Net through significance score**
 
+1. We use the following scripts to analyze the significance score of each layer of the U-Net.
+```bash
+bash scripts/prune_sd/gen_latent.sh
+```
+
+2. Then we analyze the score of each candidate pruning layer. We will get the `score.pkl` using the following code. 
+```python3
+python3 notebooks/analysis/analyze_score_v2.py
+```
+
+3. Prune the U-Net based on the calculated `score.pkl`
+```bash
+bash scripts/prune_sd/prune_tiny.sh
+
+# Specify the score file path by `--score_file`.
+```
 
 
 - #### **Finetuning Pruned U-Net**
 We follow [BK-SDM](https://github.com/Nota-NetsPresso/BK-SDM) to finetune the pruned U-Net.
+```bash
+bash scripts/prune_sd/kd_finetune_tiny.sh
+
+# Specify the teacher model path by `--pretrained_model_name_or_path` and the student model path by `--unet_config_path`. 
+```
+Following [BK-SDM](https://github.com/Nota-NetsPresso/BK-SDM), we use the dataset preprocessed_212k. 
+
+### Training our lightweight VAE
+The following script is used to train our lightweight VAE. We use datasets from [Laion_aesthetics_5plus_1024_33M](https://huggingface.co/datasets/MuhammadHanif/Laion_aesthetics_5plus_1024_33M).
+```bash
+bash scripts/optimize_vae/train_tinyvae.sh
+```
 
 
 
 
-
-### Training LCMs
+## Training LCMs
 Training accelerated Latent consistency models (LCM) using the following scripts.
 
 - ### **Distilling SD models to LCMs**
@@ -128,13 +155,15 @@ bash scripts/hybrid_sd/lcm_t2i_sd.sh
 ```
 
 - ### **Distilling Pruned SD models to LCMs**
-Using the following scripts to distill ours pruned SD models to LCMs.
+Use the following scripts to distill our pruned tiny SD models to LCMs.
 ```bash
 bash scripts/hybrid_sd/lcm_t2i_tiny.sh
 ```
+ 
 
 
-### Results
+
+## Results
 <div align="center">
 <a>
 <img src="assets/visual_sdxl.png"   height="400" /> 
@@ -144,3 +173,5 @@ bash scripts/hybrid_sd/lcm_t2i_tiny.sh
 
 
 ### Replacing the VAE with our lightweight VAE
+
+### Evaluation on MS-COCO Benchmark

@@ -3,10 +3,9 @@ export http_proxy=http://sys-proxy-rd-relay.byted.org:8118 https_proxy=http://sy
 
 MODEL_ROOT="/mnt/bn/bytenn-yg2/pretrained_models"
 DATA_ROOT="/mnt/bn/bytenn-yg2/datasets"
-# TRAIN_DATA_DIR="/mnt/bn/bytenn-yg2/datasets/laion_aes/preprocessed_11k"
-TRAIN_DATA_DIR="$DATA_ROOT/laion_aes/preprocessed_11k"  # 11k
-# MODEL_NAME=$MODEL_ROOT/SG161222--Realistic_Vision_V5.1_noVAE
-#MODEL_NAME=$MODEL_ROOT/runwayml--stable-diffusion-v1-5
+
+TRAIN_DATA_DIR="$DATA_ROOT/laion_aes/preprocessed_11k"  
+
 MODEL_NAME=$MODEL_ROOT/CompVis--stable-diffusion-v1-4 
 UNET_NAME="bk_tiny" # option: ["bk_base", "bk_small", "bk_tiny"]
 
@@ -15,7 +14,7 @@ GPU_NUM=3
 BATCH_SIZE=16
 GRAD_ACCUMULATION=4
 
-#19 27
+
 EXP_NAMES=("a19_b21/unet")
 
 for exp_name in ${EXP_NAMES[@]};
@@ -23,7 +22,7 @@ do
   echo "exp_name = $exp_name"
   UNET_CONFIG_PATH="results/finetune/NaivePrune/$exp_name"
   OUTPUT_DIR="results/finetune/NaivePrune/${exp_name}_finetuned" # please adjust it if needed
-  # OUTPUT_DIR=$UNET_CONFIG_PATH # please adjust it if needed
+
   echo "output_dir = $OUTPUT_DIR"
 
   StartTime=$(date +%s)
