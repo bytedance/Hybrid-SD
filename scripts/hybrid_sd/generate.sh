@@ -29,7 +29,7 @@ do
         CUDA_VISIBLE_DEVICES=0 python3 examples/hybrid_sd/generate_batch.py \
                 --model_id ${model_id} \
                 --steps 25  \
-                --data_list /mnt/bd/bytenn-lq/datasets/mscoco_val2014_30k/metadata.csv \
+                --data_list datasets/mscoco_val2014_30k/metadata.csv \
                 --seed 1674753452 \
                 --img_sz 512 \
                 --img_resz 256 \

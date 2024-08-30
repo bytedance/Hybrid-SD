@@ -1,10 +1,10 @@
 export PYTHONPATH='.'
 
 CUDA_VISIBLE_DEVICES=0 python3 examples/prune_sd/generate_batch.py \
-        --model_id /mnt/bn/bytenn-yg2/pretrained_models/nota-ai--bk-sdm-small \
-        --unet_path /mnt/bn/bytenn-yg2/ycq/workspace/bytenn_diffusion_tools/publics/BK-SDM/results/bs64_kd_bk_small/checkpoint-50000 \
+        --model_id pretrained_models/nota-ai--bk-sdm-small \
+        --unet_path publics/BK-SDM/results/bs64_kd_bk_small/checkpoint-50000 \
         --steps 25  \
-        --data_list /mnt/bn/bytenn-yg2/datasets/mscoco_val2014_30k/metadata.csv \
+        --data_list datasets/mscoco_val2014_30k/metadata.csv \
         --seed 1674753452 \
         --img_sz 512 \
         --img_resz 256 \

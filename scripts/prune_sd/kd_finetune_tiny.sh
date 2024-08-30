@@ -1,7 +1,7 @@
 export PYTHONPATH='.'
 
-MODEL_ROOT="/mnt/bn/bytenn-yg2/pretrained_models"
-DATA_ROOT="/mnt/bn/bytenn-yg2/datasets"
+MODEL_ROOT="pretrained_models"
+DATA_ROOT="datasets"
 
 TRAIN_DATA_DIR="$DATA_ROOT/laion_aes/preprocessed_11k"  
 

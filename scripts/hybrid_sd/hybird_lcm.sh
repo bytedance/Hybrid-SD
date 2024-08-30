@@ -1,5 +1,5 @@
 export PYTHONPATH='.'
-MODEL_ROOT=/mnt/bn/bytenn-yg2/pretrained_models
+MODEL_ROOT=pretrained_models
 MODEL_LARGE=CompVis--stable-diffusion-v1-4
 MODEL_SMALL=nota-ai--bk-sdm-tiny
 GPU_NUM=1

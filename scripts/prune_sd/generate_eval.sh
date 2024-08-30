@@ -1,11 +1,11 @@
 export PYTHONPATH='.'
 
-MODEL_ID=/mnt/bn/bytenn-lq2/pretrained_models/SG161222--Realistic_Vision_V5.1_noVAE
+MODEL_ID=pretrained_models/SG161222--Realistic_Vision_V5.1_noVAE
 OUTPUT_DIR=results/SG161222--Realistic_Vision_V5.1_noVAE
 IMG_PATH=$OUTPUT_DIR/im256
 GPU_NUM=0
 FID_BATCH_SIZE=100
-DATA_ROOT=/mnt/bn/bytenn-lq2/datasets
+DATA_ROOT=datasets
 
 CUDA_VISIBLE_DEVICES=$GPU_NUM python3 examples/prune_sd/generate_batch.py \
         --model_id $MODEL_ID \
@@ -37,6 +37,6 @@ echo "============"
 
 echo "=== CLIP Score ==="
 CLIP_TXT=$OUTPUT_DIR/im256_clip.txt
-DATA_LIST=/mnt/bn/bytenn-lq2/datasets/mscoco_val2014_30k/metadata.csv
+DATA_LIST=datasets/mscoco_val2014_30k/metadata.csv
 CUDA_VISIBLE_DEVICES=$GPU_NUM python3 evaluation/clip_score.py --img_dir $IMG_PATH --data_list $DATA_LIST --save_txt $CLIP_TXT
 echo "============"
