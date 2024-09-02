@@ -73,11 +73,13 @@ For hybrid inference for SDXL models, please refer to `scripts/hybrid_sd/hybird_
 
 - #### **Latent Consistency Models (LCMs)**
 
-To use hybrid SD for LCMs, you can launch the `scripts/hybrid_sd/hybird_lcm.sh` and specify the large model and small model.
+To use hybrid SD for LCMs, you can launch the `scripts/hybrid_sd/hybird_lcm.sh` and specify the large model and small model. You also need to pass `TEACHER_MODEL_PATH` to load VAE, tokenizer, and Text Encoder.
 
 ```bash
 # scripts/hybrid_sd/hybird_lcm.sh
 MODEL_LARGE=runwayml--stable-diffusion-v1-4
+MODEL_ROOT=pretrained_models
+TEACHER_MODEL_PATH=$MODEL_ROOT/$MODEL_LARGE
 PATH_MODEL_LARGE="results/lcm_sd14_2w/checkpoint-20000"
 PATH_MODEL_SMALL="results/nota-ai--bk-sdm-tiny_LCM/checkpoint-20000"
 step_list=("0,8" "4,4"  "8,0")
@@ -88,6 +90,7 @@ do
     OUTPUT_DIR=results/HybridSD_LCM_guidance7/$MODEL_LARGE-$MODEL_SMALL-$STEP
     CUDA_VISIBLE_DEVICES=$GPU_NUM python3 examples/hybrid_sd/hybrid_LCM.py \
             --model_id $PATH_MODEL_LARGE $PATH_MODEL_SMALL\
+            --pretrained_teacher_model $TEACHER_MODEL_PATH \
             --steps $STEP  \
             --prompts_file examples/hybrid_sd/prompts_realistic.txt \
             --seed 1674753452 \
@@ -109,14 +112,14 @@ done
 
 - #### **Pruning U-Net through significance score**
 
-1. We use the following scripts to analyze the significance score of each layer of the U-Net.
+1. We use the following scripts to analyze the significance score of each layer of the U-Net. The results will be saved in `results/NaivePrune/$base_arch/prune_oneshot` by default.
 ```bash
 bash scripts/prune_sd/gen_latent.sh
 ```
 
 2. Then we analyze the score of each candidate pruning layer based on the predicted latents. We will get the `score.pkl` using the following code. 
 ```python3
-python3 notebooks/analysis/analyze_score.py
+python3 examples/prune_sd/analyze_score.py
 ```
 
 3. Prune the U-Net based on the calculated `score.pkl`
