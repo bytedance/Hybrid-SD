@@ -134,28 +134,7 @@ class ImageEmbeddingDataset(wds.DataPipeline, wds.compat.FluidInterface):
         
 
 
-tokenizer = CLIPTokenizer.from_pretrained('pretrained_models/runwayml--stable-diffusion-v1-5', subfolder="tokenizer")
-
-def tokenize_captions(texts, is_train=True):
-        inputs = tokenizer(texts, max_length=tokenizer.model_max_length, padding="max_length", truncation=True, return_tensors="pt")
-        return inputs.input_ids
-
-def collate_fn(examples):
-    # instance_prompt_ids = [example["instance_prompt_ids"] for example in examples]
-    texts_en = [example["instance_en"] for example in examples]
-    pixel_values = [example["instance_images"] for example in examples]
-    pixel_values = torch.stack(pixel_values)
-    pixel_values = pixel_values.to(memory_format=torch.contiguous_format).float()
-    input_ids = tokenize_captions(texts_en)
-    batch = {
-        "pixel_values": pixel_values,
-        "input_ids": input_ids
-    }
-
-    return batch
-
-
-def WebDataset(url, batch_size, size=512,num_workers=8, prefetch_factor=32):
+def WebDataset(url, batch_size, size=512, tokenizer_path='pretrained_models/runwayml--stable-diffusion-v1-5', num_workers=8, prefetch_factor=32):
     print(f'loading dataset from path: {url}')
     urls = [os.path.join(url, file_name) for file_name in os.listdir(url) if file_name.endswith('.tar')]
     print(f'load dataset done')
@@ -171,6 +150,25 @@ def WebDataset(url, batch_size, size=512,num_workers=8, prefetch_factor=32):
     class DataLoaderX(DataLoader):
         def __iter__(self):
             return BackgroundGenerator(super().__iter__())
+    tokenizer = CLIPTokenizer.from_pretrained(tokenizer_path, subfolder="tokenizer")
+
+    def tokenize_captions(texts, is_train=True):
+            inputs = tokenizer(texts, max_length=tokenizer.model_max_length, padding="max_length", truncation=True, return_tensors="pt")
+            return inputs.input_ids
+
+    def collate_fn(examples):
+        # instance_prompt_ids = [example["instance_prompt_ids"] for example in examples]
+        texts_en = [example["instance_en"] for example in examples]
+        pixel_values = [example["instance_images"] for example in examples]
+        pixel_values = torch.stack(pixel_values)
+        pixel_values = pixel_values.to(memory_format=torch.contiguous_format).float()
+        input_ids = tokenize_captions(texts_en)
+        batch = {
+            "pixel_values": pixel_values,
+            "input_ids": input_ids
+        }
+
+        return batch
     
     loader = DataLoaderX(
             dataset,
@@ -189,7 +187,7 @@ if __name__ == "__main__":
     url = 'datasets/Laion_aesthetics_5plus_1024_33M/Laion33m_data'
     batch_size = 64
     
-    train_dataloader = WebDataset(url, batch_size=batch_size,size=1024)
+    train_dataloader = WebDataset(url, batch_size=batch_size, size=1024)
    
     
 

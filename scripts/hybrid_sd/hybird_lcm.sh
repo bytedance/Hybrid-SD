@@ -5,7 +5,7 @@ MODEL_SMALL=nota-ai--bk-sdm-tiny
 GPU_NUM=1
 
 # Hybrid inference with LCM models
-MODEL_LARGE=runwayml--stable-diffusion-v1-4
+MODEL_LARGE=CompVis--stable-diffusion-v1-4 
 TEACHER_MODEL_PATH=$MODEL_ROOT/$MODEL_LARGE
 PATH_MODEL_LARGE="results/lcm_sd14_2w/checkpoint-20000"
 PATH_MODEL_SMALL="results/lcm_ours_tiny_sd14/checkpoint-20000"

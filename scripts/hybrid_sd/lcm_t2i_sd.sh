@@ -3,8 +3,8 @@ export PYTHONPATH='.'
 
 
 MODEL_DIR="pretrained_models/CompVis--stable-diffusion-v1-4"
-TRAIN_DATA_DIR="datasets/laion2b_en_aesthetics/data"
-OUTPUT_DIR="results/lcm_sd14_2w_new" # please adjust it if needed
+TRAIN_DATA_DIR="datasets/laion2b_en_aesthetics/data"  
+OUTPUT_DIR="results/lcm_sd14_2w_news" # please adjust it if needed
 
 BATCH_SIZE=12
 GRAD_ACCUMULATION=2

@@ -26,9 +26,12 @@ conda activate hybrid_sd
 pip install -r requirements.txt
 ```
 
-
-
-
+## Pretrained Models
+We provide a number of pretrained models as follows:
+- Ours pruned U-Net (225M): [U-Net](https://)
+- Ours VAE: [VAE](https://)
+- Ours pruned LCM: [LCM](https://)
+- SD-v1.4 LCM: [SD-LCM](https://)
 
 ## Hybrid Inference
 

@@ -305,7 +305,7 @@ def train():
     )
 
 
-    train_dataloader = WebDataset(args.train_data_dir, batch_size=args.train_batch_size, size=args.resolution)
+    train_dataloader = WebDataset(args.train_data_dir, tokenizer_path=args.pretrained_model_name_or_path, batch_size=args.train_batch_size, size=args.resolution)
     use_colorjitter = True
 
     def color_augment(im): #[0,1] images
