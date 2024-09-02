@@ -14,7 +14,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 
-from  compression.optimize_vae.models.stylegant.torch_utils.ops import bias_act
+from compression.optimize_vae.models.stylegant.torch_utils.ops import bias_act
 
 
 class ResidualBlock(nn.Module):

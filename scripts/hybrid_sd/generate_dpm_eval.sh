@@ -2,14 +2,8 @@ export PYTHONPATH='.'
 
 DATA_ROOT=datasets
 MODEL_ROOT=pretrained_models
-# DATA_ROOT=./datasets
-# MODEL_ROOT=./pretrained_models
-# MODEL_LARGE=SG161222--Realistic_Vision_V5.1_noVAE
-# MODEL_LARGE=stabilityai/stable-diffusion-xl-base-1.0
 MODEL_LARGE=CompVis--stable-diffusion-v1-4
-# MODEL_LARGE=runwayml--stable-diffusion-v1-5
-# MODEL_SMALL=nota-ai--bk-sdm-small
-# MODEL_SMALL=nota-ai--bk-sdm-tiny
+
 
 MODEL_SMALL=a19_b21_oursTiny
 

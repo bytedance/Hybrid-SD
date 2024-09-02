@@ -75,7 +75,7 @@ from compression.prune_sd.LCM.Scheduling_LCM import LCMScheduler
 from diffusers.optimization import get_scheduler
 from diffusers.utils import check_min_version, is_wandb_available
 from diffusers.utils.import_utils import is_xformers_available
-sys.path.insert(0, "/home/tiger/.local/lib/python3.9/site-packages") #0.27.0
+
 
 from compression.prune_sd.models.unet_2d_condition import UNet2DConditionModel    #as CustomUNet2DConditionModel
 from diffusers.training_utils import resolve_interpolation_mode
