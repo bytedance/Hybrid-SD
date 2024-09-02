@@ -25,7 +25,7 @@ do
   echo "output_dir = $OUTPUT_DIR"
 
   StartTime=$(date +%s)
-  CUDA_VISIBLE_DEVICES=$GPU_NUM accelerate launch publics/BK-SDM/src/kd_finetune_t2i.py \
+  CUDA_VISIBLE_DEVICES=$GPU_NUM accelerate launch examples/prune_sd/kd_finetune_t2i.py \
     --pretrained_model_name_or_path $MODEL_NAME \
     --train_data_dir $TRAIN_DATA_DIR \
     --dataset_name laion_aes \
