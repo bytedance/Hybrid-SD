@@ -870,7 +870,7 @@ def main():
             mapping_layers_stu[i] = 'module.'+m_stu
     add_hook(unet_teacher, acts_tea, mapping_layers_tea)
     add_hook(unet, acts_stu, mapping_layers_stu)
-
+    import pdb;pdb.set_trace()
 
     for epoch in range(first_epoch, args.num_train_epochs):
         unet.train()

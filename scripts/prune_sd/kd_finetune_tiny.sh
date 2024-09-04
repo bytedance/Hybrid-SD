@@ -1,31 +1,31 @@
 export PYTHONPATH='.'
 
-MODEL_ROOT="pretrained_models"
-DATA_ROOT="datasets"
+MODEL_ROOT="/mnt/bn/bytenn-yg2/pretrained_models"
+DATA_ROOT="/mnt/bn/bytenn-yg2/datasets"
 
 TRAIN_DATA_DIR="$DATA_ROOT/laion_aes/preprocessed_11k"  
 
 MODEL_NAME=$MODEL_ROOT/CompVis--stable-diffusion-v1-4 
 UNET_NAME="bk_tiny" # option: ["bk_base", "bk_small", "bk_tiny"]
 
-GPU_NUM=3
+GPU_NUM=1
 
 BATCH_SIZE=16
 GRAD_ACCUMULATION=4
-
 
 EXP_NAMES=("a19_b21/unet")
 
 for exp_name in ${EXP_NAMES[@]};
 do
   echo "exp_name = $exp_name"
-  UNET_CONFIG_PATH="results/finetune/NaivePrune/$exp_name"
+  UNET_CONFIG_PATH="results/NaivePrune/bk-sdm-tiny/prune_oneshot/$exp_name"
   OUTPUT_DIR="results/finetune/NaivePrune/${exp_name}_finetuned" # please adjust it if needed
 
   echo "output_dir = $OUTPUT_DIR"
 
   StartTime=$(date +%s)
-  CUDA_VISIBLE_DEVICES=$GPU_NUM accelerate launch examples/prune_sd/kd_finetune_t2i.py \
+  CUDA_VISIBLE_DEVICES=$GPU_NUM accelerate launch  --num_processes ${GPU_NUM} --main_process_port 21101 \
+  examples/prune_sd/kd_finetune_t2i.py \
     --pretrained_model_name_or_path $MODEL_NAME \
     --train_data_dir $TRAIN_DATA_DIR \
     --dataset_name laion_aes \
