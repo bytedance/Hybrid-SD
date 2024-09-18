@@ -148,7 +148,7 @@ bash scripts/optimize_vae/train_tinyvae.sh
 ```
 
 ### Comparisons between our lightweight VAE and TAESD
-
+Ours VAE shows better visual quality and detail refinements than TAESD. Ours VAE also achieves better FID scores than TAESD on MSCOCO 2017 5K datasets.
 <div align="center">
 <a>
 <img src="assets/vae.png"  align = "center"  height="500" /> 
