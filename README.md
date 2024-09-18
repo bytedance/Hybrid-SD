@@ -9,11 +9,11 @@
 </div>
 
 
+<div align="center">
 <a>
-<img src="assets/hybrid_sd.png"  align = "center"  height="300" /> 
-
+<img src="assets/hybrid_sd.png"  align = "center"  height="280" /> 
 </a>
- 
+</div>
 
 
 ## **Introduction**
