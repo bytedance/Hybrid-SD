@@ -147,6 +147,14 @@ The following script is used to train our lightweight VAE. We use datasets from 
 bash scripts/optimize_vae/train_tinyvae.sh
 ```
 
+### Comparisons between our lightweight VAE and TAESD
+
+<div align="center">
+<a>
+<img src="assets/vae.png"  align = "center"  height="500" /> 
+</a>
+</div>
+
 
 
 
@@ -164,7 +172,7 @@ Use the following scripts to distill our pruned tiny SD models to LCMs.
 ```bash
 bash scripts/hybrid_sd/lcm_t2i_tiny.sh
 ```
- 
+
 
 
 
