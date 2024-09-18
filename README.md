@@ -1,4 +1,3 @@
-
 <div align="center">
 <h1> Hybrid SD: Edge-Cloud Collaborative Inference for Stable Diffusion Models  
 </h1>  
@@ -10,7 +9,7 @@
 
 
 <a>
-<img src="assets/hybrid_sd.png"  align = "center"  height="300" /> 
+<img src="assets/hybrid_sd.png"  align = "center"  height="260" /> 
 
 </a>
  
