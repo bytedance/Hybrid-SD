@@ -2,6 +2,7 @@ NUM_GPUS=2
 BATCH_SIZE=24
 ACC_STEPS=2
 
+mkdir -p publics
 cd publics
 git clone https://github.com/CompVis/taming-transformers.git
 cd ..
