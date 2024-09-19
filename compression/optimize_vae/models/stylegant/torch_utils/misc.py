@@ -11,7 +11,7 @@ import contextlib
 import numpy as np
 import torch
 import warnings
-import from compression.optimize_vae.models.stylegant.dnnlib
+import compression.optimize_vae.models.stylegant.dnnlib as dnnlib
 
 #----------------------------------------------------------------------------
 # Cached construction of constant tensors. Avoids CPU=>GPU copy when the

@@ -444,7 +444,6 @@ def train():
                 else:
                     optimizer_idx = 1
                 
-
                 if global_step < args.disc_start: # only train discriminator
                     optimizer_idx = 1
 

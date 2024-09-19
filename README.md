@@ -142,7 +142,7 @@ bash scripts/prune_sd/kd_finetune_tiny.sh
 Following [BK-SDM](https://github.com/Nota-NetsPresso/BK-SDM), we use the dataset preprocessed_212k. 
 
 ### Training our lightweight VAE
-The following script is used to train our lightweight VAE. We use datasets from [Laion_aesthetics_5plus_1024_33M](https://huggingface.co/datasets/MuhammadHanif/Laion_aesthetics_5plus_1024_33M).
+The following script is used to train our lightweight VAE. We use datasets from [Laion_aesthetics_5plus_1024_33M](https://huggingface.co/datasets/MuhammadHanif/Laion_aesthetics_5plus_1024_33M). We use the
 ```bash
 bash scripts/optimize_vae/train_tinyvae.sh
 ```
