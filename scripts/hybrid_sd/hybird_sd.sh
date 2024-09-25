@@ -8,9 +8,6 @@ PATH_MODEL_SMALL=results/ours_tiny/a19_b21/checkpoint-50000 # path to our tiny m
 
 GPU_NUM=1
 
-
-
-
 step_list=("0,25"  "10,15"  "25,0")
 
 

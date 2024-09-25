@@ -15,14 +15,14 @@
 </a>
  
 
-
 ## **Introduction**
 Hybrid SD is a novel framework designed for edge-cloud collaborative inference of Stable Diffusion Models. By integrating the superior large models on cloud servers and efficient small models on edge devices, Hybrid SD achieves state-of-the-art parameter efficiency on edge devices with competitive visual quality.
 
-## Install
+## Installation
+
+```bash
 conda create -n hybrid_sd python=3.9.2
 conda activate hybrid_sd
-```bash
 pip install -r requirements.txt
 ```
 
@@ -35,7 +35,7 @@ We provide a number of pretrained models as follows:
 
 ## Hybrid Inference
 
-- #### **SD Models**
+### **SD Models**
 To use hybrid SD for inference, you can launch the `scripts/hybrid_sd/hybird_sd.sh`, please specify the large and small models.
 
 ```bash
@@ -74,7 +74,7 @@ Optional arguments:
 
 For hybrid inference for SDXL models, please refer to `scripts/hybrid_sd/hybird_sdxl.sh` accordingly.
 
-- #### **Latent Consistency Models (LCMs)**
+### **Latent Consistency Models (LCMs)**
 
 To use hybrid SD for LCMs, you can launch the `scripts/hybrid_sd/hybird_lcm.sh` and specify the large model and small model. You also need to pass `TEACHER_MODEL_PATH` to load VAE, tokenizer, and Text Encoder.
 
@@ -109,9 +109,21 @@ done
 ```
 
 
+### Evaluation on MS-COCO Benchmark
 
-## Pruning U-Net
+1. Evaluate hybrid inference with the large model SD-v1.4 and the small model our tiny U-Net on MS-COCO 2014 30K.
+```bash
+bash scripts/hybrid_sd/generate_dpm_eval.sh
+```
 
+2. Evaluate hybrid inference with LCMs on MS-COCO 2014 30K.
+```bash
+bash scripts/hybrid_sd/generate_lcm_eval.sh
+```
+
+## Training
+
+### Pruning U-Net
 
 - #### **Pruning U-Net through significance score**
 
@@ -132,8 +144,7 @@ bash scripts/prune_sd/prune_tiny.sh
 # Specify the score file path by `--score_file`.
 ```
 
-
-- #### **Finetuning Pruned U-Net**
+- #### **Finetuning the pruned U-Net**
 We follow [BK-SDM](https://github.com/Nota-NetsPresso/BK-SDM) to finetune the pruned U-Net.
 ```bash
 bash scripts/prune_sd/kd_finetune_tiny.sh
@@ -148,10 +159,7 @@ The following script is used to train our lightweight VAE. We use datasets from 
 bash scripts/optimize_vae/train_tinyvae.sh
 ```
 
-
-
-
-## Training LCMs
+### Training LCMs
 Training accelerated Latent consistency models (LCM) using the following scripts.
 
 ### **1. Distilling SD models to LCMs**
@@ -167,20 +175,6 @@ bash scripts/hybrid_sd/lcm_t2i_tiny.sh
 ```
  
 
-
-
-
-## Evaluation on MS-COCO Benchmark
-
-1. Evaluate hybrid inference with the large model SD-v1.4 and the small model our tiny U-Net on MS-COCO 2014 30K.
-```bash
-bash scripts/hybrid_sd/generate_dpm_eval.sh
-```
-
-2. Evaluate hybrid inference with LCMs on MS-COCO 2014 30K.
-```bash
-bash scripts/hybrid_sd/generate_lcm_eval.sh
-```
 
 
 ## Results
