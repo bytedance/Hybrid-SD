@@ -10,7 +10,7 @@
 
 <div align="center">
 <a>
-<img src="assets/hybrid_sd.png"  align = "center"  height="280" /> 
+<img src="assets/hybrid_sd.png"  align = "center" /> 
 </a>
 </div>
 
@@ -144,7 +144,7 @@ bash scripts/prune_sd/prune_tiny.sh
 ```
 
 - #### **Finetuning the pruned U-Net**
-We follow [BK-SDM](https://github.com/Nota-NetsPresso/BK-SDM) to finetune the pruned U-Net.
+
 ```bash
 bash scripts/prune_sd/kd_finetune_tiny.sh
 
@@ -168,7 +168,6 @@ Ours VAE shows better visual quality and detail refinements than TAESD. Ours VAE
 
 
 
-
 ## Training LCMs
 Training accelerated Latent consistency models (LCM) using the following scripts.
 
@@ -185,8 +184,6 @@ bash scripts/hybrid_sd/lcm_t2i_tiny.sh
 ```
 
 
-
-
 ## Results
 <div align="center">
 <a>
@@ -194,3 +191,21 @@ bash scripts/hybrid_sd/lcm_t2i_tiny.sh
 
 </a>
 </div>
+
+
+
+## Acknowledgments
+- [CompVis](https://github.com/CompVis/latent-diffusion), [Runway](https://runwayml.com/), and [Stability AI](https://stability.ai/) for the pioneering research on Stable Diffusion.
+- [Diffusers](https://github.com/huggingface/diffusers), [BK-SDM](https://github.com/Nota-NetsPresso/BK-SDM/) for their valuable contributions.
+
+
+## Citation
+If you find our work helpful, please cite it!
+```
+@article{yan2024hybrid,
+  title={Hybrid SD: Edge-Cloud Collaborative Inference for Stable Diffusion Models},
+  author={Yan, Chenqian and Liu, Songwei and Liu, Hongjian and Peng, Xurui and Wang, Xiaojian and Chen, Fangming and Fu, Lean and Mei, Xing},
+  journal={arXiv preprint arXiv:2408.06646},
+  year={2024}
+}
+```
