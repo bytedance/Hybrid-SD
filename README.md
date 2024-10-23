@@ -32,90 +32,41 @@ We provide a number of pretrained models as follows:
 - Ours pruned LCM: [LCM](https://)
 - SD-v1.4 LCM: [SD-LCM](https://)
 
-## Hybrid Inference
+## SDXL Hybrid Inference
 
 ### **SD Models**
-To use hybrid SD for inference, you can launch the `scripts/hybrid_sd/hybird_sd.sh`, please specify the large and small models.
+To use hybrid SD for inference, you can launch the `scripts/hybrid_sd/hybird_sd.sh`, please specify the large and small models. For hybrid inference for SDXL models, please refer to `scripts/hybrid_sd/hybird_sdxl.sh` accordingly.
 
-```bash
-# scripts/hybrid_sd/hybird_sd.sh
-step_list=("0,25"  "10,15"  "25,0")
+ <details>
+  <summary>
+  Optional arguments
+  </summary>
 
-
-for STEP in ${step_list[@]}
-do
-    OUTPUT_DIR=results/HybridSD_dpm_guidance7_visual/$MODEL_LARGE-$MODEL_SMALL-$STEP
-    CUDA_VISIBLE_DEVICES=$GPU_NUM python3 examples/hybrid_sd/hybrid.py \
-            --model_id $PATH_MODEL_LARGE $PATH_MODEL_SMALL\
-            --steps $STEP  \
-            --prompts_file examples/hybrid_sd/prompts_realistic.txt \
-            --seed 1674753452 \
-            --img_sz 512 \
-            --output_dir $OUTPUT_DIR \
-            --num_images_per_prompt 1 \
-            --num_images 1 \
-            --enable_xformers_memory_efficient_attention \
-            --save_middle \
-            --use_dpm_solver \
-            --guidance_scale 7
-done
-```
-
-Optional arguments:
-- `PATH_MODEL_LARGE`: the large model path.
-- `PATH_MODEL_SMALL`: the small model path.
-- `--step`: the steps distributed to different models. (e.g., "10,15" means the first 10 steps are distributed to the large model, while the last 15 steps are shifted to the small model.)
-- `--seed`: the random seed. 
-- `--img_sz`: the image size.
-- `--prompts_file`: put prompts in the .txt file.
-- `--output_dir`: the output directory for saving generated images.
+  - `PATH_MODEL_LARGE`: the large model path.
+  - `PATH_MODEL_SMALL`: the small model path.
+  - `--step`: the steps distributed to different models. (e.g., "10,15" means the first 10 steps are distributed to the large model, while the last 15 steps are shifted to the small model.)
+  - `--seed`: the random seed. 
+  - `--img_sz`: the image size.
+  - `--prompts_file`: put prompts in the .txt file.
+  - `--output_dir`: the output directory for saving generated images.
+   </details>
 
 
-For hybrid inference for SDXL models, please refer to `scripts/hybrid_sd/hybird_sdxl.sh` accordingly.
+  
 
 ### **Latent Consistency Models (LCMs)**
 
 To use hybrid SD for LCMs, you can launch the `scripts/hybrid_sd/hybird_lcm.sh` and specify the large model and small model. You also need to pass `TEACHER_MODEL_PATH` to load VAE, tokenizer, and Text Encoder.
 
-```bash
-# scripts/hybrid_sd/hybird_lcm.sh
-MODEL_LARGE=runwayml--stable-diffusion-v1-4
-MODEL_ROOT=pretrained_models
-TEACHER_MODEL_PATH=$MODEL_ROOT/$MODEL_LARGE
-PATH_MODEL_LARGE="results/lcm_sd14_2w/checkpoint-20000"
-PATH_MODEL_SMALL="results/nota-ai--bk-sdm-tiny_LCM/checkpoint-20000"
-step_list=("0,8" "4,4"  "8,0")
-
-
-for STEP in ${step_list[@]}
-do
-    OUTPUT_DIR=results/HybridSD_LCM_guidance7/$MODEL_LARGE-$MODEL_SMALL-$STEP
-    CUDA_VISIBLE_DEVICES=$GPU_NUM python3 examples/hybrid_sd/hybrid_LCM.py \
-            --model_id $PATH_MODEL_LARGE $PATH_MODEL_SMALL\
-            --pretrained_teacher_model $TEACHER_MODEL_PATH \
-            --steps $STEP  \
-            --prompts_file examples/hybrid_sd/prompts_realistic.txt \
-            --seed 1674753452 \
-            --img_sz 512 \
-            --output_dir $OUTPUT_DIR \
-            --num_images_per_prompt 1 \
-            --num_images 1 \
-            --enable_xformers_memory_efficient_attention \
-            --save_middle \
-            --use_dpm_solver \
-            --guidance_scale 7
-done
-```
-
 
 ### Evaluation on MS-COCO Benchmark
 
-1. Evaluate hybrid inference with the large model SD-v1.4 and the small model our tiny U-Net on MS-COCO 2014 30K.
+* Evaluate hybrid inference with the large model SD-v1.4 and the small model our tiny U-Net on MS-COCO 2014 30K.
 ```bash
 bash scripts/hybrid_sd/generate_dpm_eval.sh
 ```
 
-2. Evaluate hybrid inference with LCMs on MS-COCO 2014 30K.
+* Evaluate hybrid inference with LCMs on MS-COCO 2014 30K.
 ```bash
 bash scripts/hybrid_sd/generate_lcm_eval.sh
 ```
@@ -124,13 +75,13 @@ bash scripts/hybrid_sd/generate_lcm_eval.sh
 
 ### Pruning U-Net
 
-- #### **Pruning U-Net through significance score**
+- Pruning U-Net through significance score
 
 ```bash
 bash scripts/prune_sd/prune_tiny.sh
 ```
 
-- #### **Finetuning the pruned U-Net**
+- Finetuning the pruned U-Net
 
 ```bash
 bash scripts/prune_sd/kd_finetune_tiny.sh
@@ -139,12 +90,25 @@ bash scripts/prune_sd/kd_finetune_tiny.sh
 ```
 Following [BK-SDM](https://github.com/Nota-NetsPresso/BK-SDM), we use the dataset preprocessed_212k. 
 
+
+
 ### Training our lightweight VAE
-The following script is used to train our lightweight VAE. We use datasets from [Laion_aesthetics_5plus_1024_33M](https://huggingface.co/datasets/MuhammadHanif/Laion_aesthetics_5plus_1024_33M). We use VAE with LPIPS loss and adversarial loss. We adopt the discriminator from StyelGAN-t and leverage several data augmentation and degradation for VAE enhancement.
+The following script is used to train our lightweight VAE. 
 ```bash
 bash scripts/optimize_vae/train_tinyvae.sh
 ```
 
+<details>
+  <summary>
+  Note
+  </summary>
+
+  - We use datasets from [Laion_aesthetics_5plus_1024_33M](https://huggingface.co/datasets/MuhammadHanif/Laion_aesthetics_5plus_1024_33M). 
+  - We optimize VAE with LPIPS loss and adversarial loss. 
+  - We adopt the discriminator from StyelGAN-t along with several data augmentation and degradation techniques for VAE enhancement.
+ </details>
+
+ 
 
 ## Training LCMs
 Training accelerated Latent consistency models (LCM) using the following scripts.
@@ -180,8 +144,6 @@ Ours VAE shows better visual quality and detail refinements than TAESD. Ours VAE
 <img src="assets/vae.png"  align = "center"  height="500" /> 
 </a>
 </div>
-
-
 
 
 
