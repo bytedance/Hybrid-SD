@@ -1,8 +1,12 @@
-
 NUM_GPUS=2
 BATCH_SIZE=24
 ACC_STEPS=2
 
+mkdir -p publics
+cd publics
+git clone https://github.com/CompVis/taming-transformers.git
+cd ..
+pip install -e publics/taming-transformers
 
 CUDA_VISIBLE_DEVICES=6,7 accelerate launch --multi_gpu --num_processes ${NUM_GPUS} --main_process_port 23333 \
     examples/optimize_vae/train_tinyvae.py \

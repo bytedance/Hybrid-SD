@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 import random
 
-from taming.modules.losses.vqperceptual import *  # TODO: taming dependency yes/no?
+from taming.modules.losses.vqperceptual import * 
 from torchvision.transforms import  GaussianBlur
 import torch.nn.functional as F 
 from torch.nn.utils import spectral_norm

@@ -11,7 +11,7 @@
 import os
 import numpy as np
 import torch
-import from compression.optimize_vae.models.stylegant.dnnlib as dnnlib
+import compression.optimize_vae.models.stylegant.dnnlib as dnnlib
 
 from .. import custom_ops
 from .. import misc

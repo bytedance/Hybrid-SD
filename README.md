@@ -1,4 +1,3 @@
-
 <div align="center">
 <h1> Hybrid SD: Edge-Cloud Collaborative Inference for Stable Diffusion Models  
 </h1>  
@@ -9,11 +8,11 @@
 </div>
 
 
+<div align="center">
 <a>
-<img src="assets/hybrid_sd.png"  align = "center"  height="300" /> 
-
+<img src="assets/hybrid_sd.png"  align = "center"  height="280" /> 
 </a>
- 
+</div>
 
 ## **Introduction**
 Hybrid SD is a novel framework designed for edge-cloud collaborative inference of Stable Diffusion Models. By integrating the superior large models on cloud servers and efficient small models on edge devices, Hybrid SD achieves state-of-the-art parameter efficiency on edge devices with competitive visual quality.
@@ -154,12 +153,23 @@ bash scripts/prune_sd/kd_finetune_tiny.sh
 Following [BK-SDM](https://github.com/Nota-NetsPresso/BK-SDM), we use the dataset preprocessed_212k. 
 
 ### Training our lightweight VAE
-The following script is used to train our lightweight VAE. We use datasets from [Laion_aesthetics_5plus_1024_33M](https://huggingface.co/datasets/MuhammadHanif/Laion_aesthetics_5plus_1024_33M).
+The following script is used to train our lightweight VAE. We use datasets from [Laion_aesthetics_5plus_1024_33M](https://huggingface.co/datasets/MuhammadHanif/Laion_aesthetics_5plus_1024_33M). We use VAE with LPIPS loss and adversarial loss. We adopt the discriminator from StyelGAN-t and leverage several data augmentation and degradation for VAE enhancement.
 ```bash
 bash scripts/optimize_vae/train_tinyvae.sh
 ```
 
-### Training LCMs
+### Comparisons between our lightweight VAE and TAESD
+Ours VAE shows better visual quality and detail refinements than TAESD. Ours VAE also achieves better FID scores than TAESD on MSCOCO 2017 5K datasets.
+<div align="center">
+<a>
+<img src="assets/vae.png"  align = "center"  height="500" /> 
+</a>
+</div>
+
+
+
+
+## Training LCMs
 Training accelerated Latent consistency models (LCM) using the following scripts.
 
 ### **1. Distilling SD models to LCMs**
@@ -173,7 +183,7 @@ Use the following scripts to distill our pruned tiny SD models to LCMs.
 ```bash
 bash scripts/hybrid_sd/lcm_t2i_tiny.sh
 ```
- 
+
 
 
 
