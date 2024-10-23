@@ -126,21 +126,8 @@ bash scripts/hybrid_sd/generate_lcm_eval.sh
 
 - #### **Pruning U-Net through significance score**
 
-1. We use the following scripts to analyze the significance score of each layer of the U-Net. The results will be saved in `results/NaivePrune/$base_arch/prune_oneshot` by default.
-```bash
-bash scripts/prune_sd/gen_latent.sh
-```
-
-2. Then we analyze the score of each candidate pruning layer based on the predicted latents. We will get the `score.pkl` using the following code. 
-```python3
-python3 examples/prune_sd/analyze_score.py
-```
-
-3. Prune the U-Net based on the calculated `score.pkl`
 ```bash
 bash scripts/prune_sd/prune_tiny.sh
-
-# Specify the score file path by `--score_file`.
 ```
 
 - #### **Finetuning the pruned U-Net**
@@ -157,15 +144,6 @@ The following script is used to train our lightweight VAE. We use datasets from 
 ```bash
 bash scripts/optimize_vae/train_tinyvae.sh
 ```
-
-### Comparisons between our lightweight VAE and TAESD
-Ours VAE shows better visual quality and detail refinements than TAESD. Ours VAE also achieves better FID scores than TAESD on MSCOCO 2017 5K datasets.
-<div align="center">
-<a>
-<img src="assets/vae.png"  align = "center"  height="500" /> 
-</a>
-</div>
-
 
 
 ## Training LCMs
@@ -184,13 +162,26 @@ bash scripts/hybrid_sd/lcm_t2i_tiny.sh
 ```
 
 
-## Results
+
+
+### Results
+### Hybrid Inference
 <div align="center">
 <a>
 <img src="assets/visual_sdxl.png"   height="400" /> 
 
 </a>
 </div>
+
+### Comparisons between our lightweight VAE and TAESD
+Ours VAE shows better visual quality and detail refinements than TAESD. Ours VAE also achieves better FID scores than TAESD on MSCOCO 2017 5K datasets.
+<div align="center">
+<a>
+<img src="assets/vae.png"  align = "center"  height="500" /> 
+</a>
+</div>
+
+
 
 
 
