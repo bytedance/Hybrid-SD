@@ -141,9 +141,19 @@ Ours VAE shows better visual quality and detail refinements than TAESD. Ours VAE
 
 #### Our small VAE vs. Baseline
 
+| Model (fp16)| Latency on V100 (ms) | GPU Memory (MiB)|
+|----|----|----|
+|SDXL baseline vae|802.7|19203|
+|SDXL small vae|611.8|17469|
+|SDXL tiny vae|61.1|8017|
+|SD1.5 baseline vae|186.6|12987|
+|SD1.5 small vae|135.6|9087|
+|SD1.5 tiny vae|16.4|6929|
+
+
 <div align="center">
 <a>
-<img src="assets/sdxl_vae_imgs.png"  align = "center"/> 
+<img src="assets/comparison_vae.png"  align = "center"/> 
 </a>
 </div>
 
