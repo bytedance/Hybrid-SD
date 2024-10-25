@@ -124,14 +124,14 @@ bash scripts/hybrid_sd/lcm_t2i_tiny.sh
 ### Hybrid SDXL Inference
 <div align="center">
 <a>
-<img src="assets/visual_sdxl.png"   height="400" /> 
+<img src="assets/visual_sdxl.png"   height="450" /> 
 
 </a>
 </div>
 
 ### VAEs
 
-#### Our lightweight VAE vs. TAESD
+#### Our tiny VAE vs. TAESD
 Ours VAE shows better visual quality and detail refinements than TAESD. Ours VAE also achieves better FID scores than TAESD on MSCOCO 2017 5K datasets.
 <div align="center">
 <a>
@@ -139,28 +139,13 @@ Ours VAE shows better visual quality and detail refinements than TAESD. Ours VAE
 </a>
 </div>
 
-#### Our pruned VAE vs. Baseline
+#### Our small VAE vs. Baseline
 
-
-<div style="display: flex; justify-content: space - around;">
-  <div>
-    <img src="assets/sdxl.png" alt="图片1" style="width: 200px;">
-    <p style="text - align: center;">SDXL</p>
-  </div>
-  <div>
-    <img src="assets/pruned_sdxl.png" alt="图片2" style="width: 200px;">
-    <p style="text - align: center;">SDXL with small vae</p>
-  </div>
-  <div>
-    <img src="assets/taesd_xl.png" alt="图片2" style="width: 200px;">
-    <p style="text - align: center;">SDXL with TAESD</p>
-  </div>
-  <div>
-    <img src="assets/ours_taesd_xl.png" alt="图片2" style="width: 200px;">
-    <p style="text - align: center;">SDXL with ours tiny vae</p>
-  </div>
+<div align="center">
+<a>
+<img src="assets/sdxl_vae_imgs.png"  align = "center"/> 
+</a>
 </div>
-
 
 
 ## Acknowledgments
