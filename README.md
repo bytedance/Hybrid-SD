@@ -28,7 +28,7 @@ pip install -r requirements.txt
 ## Pretrained Models
 We provide a number of pretrained models as follows:
 - Ours pruned U-Net (224M): [hybrid-sd-224m](https://huggingface.co/cqyan/hybrid-sd-224m)
-- Ours tiny VAE: [hybrid-sd-tinyvae](https://huggingface.co/cqyan/hybrid-sd-tinyvae) and SDXL version: [hybrid-sd-tinyvae-xl](https://huggingface.co/cqyan/hybrid-sd-tinyvae-xl). Additionaly, we provie the decoder pruned version of SD1.5 [hybrid-sd-small-vae](https://huggingface.co/cqyan/hybrid-sd-small-vae) and SDXL [hybrid-sd-small-vae-xl](https://huggingface.co/cqyan/hybrid-sd-small-vae-xl).
+- Ours tiny VAE: [hybrid-sd-tinyvae](https://huggingface.co/cqyan/hybrid-sd-tinyvae) and SDXL version: [hybrid-sd-tinyvae-xl](https://huggingface.co/cqyan/hybrid-sd-tinyvae-xl). Additionaly, we provide the decoder pruned version (**speed up 20%+**) of SD1.5 [hybrid-sd-small-vae](https://huggingface.co/cqyan/hybrid-sd-small-vae) and the SDXL [hybrid-sd-small-vae-xl](https://huggingface.co/cqyan/hybrid-sd-small-vae-xl). **Visual results can be found on [Results](#Results).**
 - [SD-v1.4](https://huggingface.co/cqyan/hybrid-sd-v1-4-lcm) and Ours pruned LCM (224M) [hybrid-sd-v1-4-lcm-224](https://huggingface.co/cqyan/hybrid-sd-v1-4-lcm-224)
 
 ## Hybrid Inference
@@ -120,7 +120,7 @@ bash scripts/hybrid_sd/lcm_t2i_tiny.sh
 
 
 
-### Results
+## Results
 ### Hybrid SDXL Inference
 <div align="center">
 <a>
@@ -129,7 +129,9 @@ bash scripts/hybrid_sd/lcm_t2i_tiny.sh
 </a>
 </div>
 
-### Comparisons between our lightweight VAE and TAESD
+### VAEs
+
+#### Our lightweight VAE vs. TAESD
 Ours VAE shows better visual quality and detail refinements than TAESD. Ours VAE also achieves better FID scores than TAESD on MSCOCO 2017 5K datasets.
 <div align="center">
 <a>
@@ -137,11 +139,33 @@ Ours VAE shows better visual quality and detail refinements than TAESD. Ours VAE
 </a>
 </div>
 
+#### Our pruned VAE vs. Baseline
+
+
+<div style="display: flex; justify-content: space - around;">
+  <div>
+    <img src="assets/sdxl.png" alt="图片1" style="width: 200px;">
+    <p style="text - align: center;">SDXL</p>
+  </div>
+  <div>
+    <img src="assets/pruned_sdxl.png" alt="图片2" style="width: 200px;">
+    <p style="text - align: center;">SDXL with small vae</p>
+  </div>
+  <div>
+    <img src="assets/taesd_xl.png" alt="图片2" style="width: 200px;">
+    <p style="text - align: center;">SDXL with TAESD</p>
+  </div>
+  <div>
+    <img src="assets/ours_taesd_xl.png" alt="图片2" style="width: 200px;">
+    <p style="text - align: center;">SDXL with ours tiny vae</p>
+  </div>
+</div>
+
 
 
 ## Acknowledgments
 - [CompVis](https://github.com/CompVis/latent-diffusion), [Runway](https://runwayml.com/), and [Stability AI](https://stability.ai/) for the pioneering research on Stable Diffusion.
-- [Diffusers](https://github.com/huggingface/diffusers), [BK-SDM](https://github.com/Nota-NetsPresso/BK-SDM/) for their valuable contributions.
+- [Diffusers](https://github.com/huggingface/diffusers), [BK-SDM](https://github.com/Nota-NetsPresso/BK-SDM/), [TAESD](https://github.com/madebyollin/taesd) for their valuable contributions.
 
 
 ## Citation
