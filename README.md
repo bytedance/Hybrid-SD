@@ -27,12 +27,11 @@ pip install -r requirements.txt
 
 ## Pretrained Models
 We provide a number of pretrained models as follows:
-- Ours pruned U-Net (225M): [U-Net](https://)
-- Ours VAE: [VAE](https://)
-- Ours pruned LCM: [LCM](https://)
-- SD-v1.4 LCM: [SD-LCM](https://)
+- Ours pruned U-Net (224M): [hybrid-sd-224m](https://huggingface.co/cqyan/hybrid-sd-224m)
+- Ours tiny VAE: [hybrid-sd-tinyvae](https://huggingface.co/cqyan/hybrid-sd-tinyvae) and SDXL version: [hybrid-sd-tinyvae-xl](https://huggingface.co/cqyan/hybrid-sd-tinyvae-xl). Additionaly, we provie the decoder pruned version of SD1.5 [hybrid-sd-small-vae](https://huggingface.co/cqyan/hybrid-sd-small-vae) and SDXL [hybrid-sd-small-vae-xl](https://huggingface.co/cqyan/hybrid-sd-small-vae-xl).
+- [SD-v1.4](https://huggingface.co/cqyan/hybrid-sd-v1-4-lcm) and Ours pruned LCM (224M) [hybrid-sd-v1-4-lcm-224](https://huggingface.co/cqyan/hybrid-sd-v1-4-lcm-224)
 
-## SDXL Hybrid Inference
+## Hybrid Inference
 
 ### **SD Models**
 To use hybrid SD for inference, you can launch the `scripts/hybrid_sd/hybird_sd.sh`, please specify the large and small models. For hybrid inference for SDXL models, please refer to `scripts/hybrid_sd/hybird_sdxl.sh` accordingly.
@@ -61,7 +60,7 @@ To use hybrid SD for LCMs, you can launch the `scripts/hybrid_sd/hybird_lcm.sh` 
 
 ### Evaluation on MS-COCO Benchmark
 
-* Evaluate hybrid inference with the large model SD-v1.4 and the small model our tiny U-Net on MS-COCO 2014 30K.
+* Evaluate hybrid inference with SD Models on MS-COCO 2014 30K.
 ```bash
 bash scripts/hybrid_sd/generate_dpm_eval.sh
 ```
@@ -74,26 +73,19 @@ bash scripts/hybrid_sd/generate_lcm_eval.sh
 ## Training
 
 ### Pruning U-Net
-
-- Pruning U-Net through significance score
-
 ```bash
+# pruning U-Net through significance score.
 bash scripts/prune_sd/prune_tiny.sh
-```
 
-- Finetuning the pruned U-Net
-
-```bash
+# finetuning the pruned U-Net.
 bash scripts/prune_sd/kd_finetune_tiny.sh
-
-# Specify the teacher model path by `--pretrained_model_name_or_path` and the student model path by `--unet_config_path`. 
 ```
 Following [BK-SDM](https://github.com/Nota-NetsPresso/BK-SDM), we use the dataset preprocessed_212k. 
 
 
 
 ### Training our lightweight VAE
-The following script is used to train our lightweight VAE. 
+
 ```bash
 bash scripts/optimize_vae/train_tinyvae.sh
 ```
@@ -113,14 +105,14 @@ bash scripts/optimize_vae/train_tinyvae.sh
 ## Training LCMs
 Training accelerated Latent consistency models (LCM) using the following scripts.
 
-### **1. Distilling SD models to LCMs**
-Using the following scripts to distill SD models to LCMs.
+1. Distilling SD models to LCMs
+
 ```bash
 bash scripts/hybrid_sd/lcm_t2i_sd.sh
 ```
 
-### **2. Distilling Pruned SD models to LCMs**
-Use the following scripts to distill our pruned tiny SD models to LCMs.
+2. Distilling Pruned SD models to LCMs
+
 ```bash
 bash scripts/hybrid_sd/lcm_t2i_tiny.sh
 ```
@@ -129,7 +121,7 @@ bash scripts/hybrid_sd/lcm_t2i_tiny.sh
 
 
 ### Results
-### Hybrid Inference
+### Hybrid SDXL Inference
 <div align="center">
 <a>
 <img src="assets/visual_sdxl.png"   height="400" /> 

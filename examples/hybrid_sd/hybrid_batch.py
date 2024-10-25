@@ -71,12 +71,6 @@ def parse_args():
     parser.add_argument(
         "--enable_xformers_memory_efficient_attention", action="store_true", help="Whether or not to use xformers."
     )
-    parser.add_argument(
-        "--pretrained_teacher_model",
-        type=str,
-        default="pretrained_models/runwayml--stable-diffusion-v1-5",
-        help="The path to specific teacher model.",
-    )
     parser.add_argument("--seed", type=int, default=1234)
     parser.add_argument('--device', type=str, default='cuda:0', help='Device to use, cuda:gpu_number or cpu')
     parser.add_argument("--use_dpm_solver", action='store_true', help='use DPMSolverMultistepScheduler')

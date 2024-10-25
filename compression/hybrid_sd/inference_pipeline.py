@@ -204,7 +204,7 @@ class HybridInferencePipeline:
                                 dtype=torch.float16)
 
 
-    def generate(self, prompt: Union[str, List[str]],  negative_prompt: Union[str, List[str]] = None, img_sz: int = 512,  guidance_scale: float = 7.5, num_images_per_prompt=1, save_path=None,prompt_embeds=None, negative_prompt_embeds=None, image_prompt_embeds=None, uncond_image_prompt_embeds=None) -> List[Image.Image]:
+    def generate(self, prompt: Union[str, List[str]],  negative_prompt: Union[str, List[str]] = None, img_sz: int = 512,  guidance_scale: float = 7.5, num_images_per_prompt=1, save_path=None,prompt_embeds=None, negative_prompt_embeds=None) -> List[Image.Image]:
         out = self.pipe(
             prompt = prompt,
             negative_prompt = negative_prompt,
@@ -217,8 +217,6 @@ class HybridInferencePipeline:
             guidance_scale = guidance_scale,
             num_images_per_prompt = num_images_per_prompt,
             save_path = save_path,
-            image_prompt_embeds=image_prompt_embeds,
-            uncond_image_prompt_embeds=uncond_image_prompt_embeds,
         )
         return out.images
     
