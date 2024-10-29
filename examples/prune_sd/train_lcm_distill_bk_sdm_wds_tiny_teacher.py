@@ -1,5 +1,4 @@
-#!/usr/bin/env python
-# coding=utf-8
+# Copyright (c) 2024 Bytedance Ltd. and/or its affiliates
 # Copyright 2024 The HuggingFace Inc. team. All rights reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,11 +17,6 @@ Use a compressed tiny teacher to train lcm version of bk_sdm model
 
 """
  
-
- 
-
- 
-
 import argparse
 import functools
 import gc

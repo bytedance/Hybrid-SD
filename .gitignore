@@ -15,7 +15,6 @@ notebooks/figures/
 
 
 *.jpg
-*.png
 *.ipynb_checkpoints
 *.ipynb
 

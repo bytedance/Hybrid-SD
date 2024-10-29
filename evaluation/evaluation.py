@@ -1,3 +1,17 @@
+# Copyright (c) 2024 Bytedance Ltd. and/or its affiliates
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 import pdb
 import torch
 import torch.utils.data
@@ -25,7 +39,6 @@ import torchvision.transforms.functional as TF
 
 # huggingface-cli login
 # python3 -m pip install clean-fid,torchmetrics
-
 
 
 def readDir(dirPath):
@@ -116,11 +129,6 @@ class MultiImageDataset(Dataset):
         batch_list = [img0, img1]
         return batch_list
 
-
-# from diffusers.models import AutoencoderKL
-# model = AutoencoderKL.from_pretrained('stabilityai/stable-diffusion-xl-base-1.0', subfolder="vae",torch_dtype=torch.float16).eval() ### 用不了
-# model = AutoencoderKL.from_pretrained('madebyollin/sdxl-vae-fp16-fix', subfolder="vae",torch_dtype=torch.float16).eval() ### 用不了
-
 def inference_gen_dir_gpu(args):
     os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
     os.environ["CUDA_VISIBLE_DEVICES"] = args.device_ids
@@ -130,7 +138,6 @@ def inference_gen_dir_gpu(args):
         weight_dtype=torch.float32
 
     if args.if_baseline:
-        ####### sd1.5 fp16, 没有黑图
         weight_dtype = torch.float16
         from compression.optimize_vae.models.autoencoder_kl import AutoencoderKL
         model = AutoencoderKL.from_pretrained('pretrained_models/runwayml--stable-diffusion-v1-5', subfolder="vae",torch_dtype=weight_dtype).eval()
@@ -198,19 +205,19 @@ def inference_gen_dir_gpu(args):
 
 
 
-    print('inference成图片耗时:',time.time()-a)
+    print('inference latency:',time.time()-a)
     flops, macs, params = calculate_flops(model=model.module, input_shape=(1, 3, 512, 512),output_as_string=True,output_precision=4,print_detailed=False,print_results=False)## decimal place
-    print('模型flops:',flops)
-    print('模型macs:',macs)
-    print('模型params:',params)
+    print('model flops:',flops)
+    print('model macs:',macs)
+    print('model params:',params)
     flops, macs, params = calculate_flops(model=model.module.encoder, input_shape=(1, 3, 512, 512),output_as_string=True,output_precision=4,print_detailed=False,print_results=False)## decimal place
-    print('encode模型flops:',flops)
-    print('encode模型macs:',macs)
-    print('encode模型params:',params)
+    print('encode model flops:',flops)
+    print('encode model macs:',macs)
+    print('encode model params:',params)
     flops, macs, params = calculate_flops(model=model.module.decoder, input_shape=(1, 4, 64,64),output_as_string=True,output_precision=4,print_detailed=False,print_results=False)## decimal place
-    print('decode模型flops:',flops)
-    print('decode模型macs:',macs)
-    print('decode模型params:',params)
+    print('decode model flops:',flops)
+    print('decode model macs:',macs)
+    print('decode model params:',params)
 
 
 
@@ -248,7 +255,7 @@ def main(input_root_real,input_root_gen, args):
             is_metric.update(inception(batch[1]), batch_size)
 
     fid_score = fid.compute_fid(input_root_real, input_root_gen)
-    print('计算指标耗时:',time.time()-a)
+    print('Latency:',time.time()-a)
     print("PSNR:", psnr_metric.compute().item())
     print("LPIPS:", lpips_metric.compute().item())
     print("ssim:", ssim_metric.compute().item())
@@ -297,7 +304,7 @@ def eval_metric(input_root_real,input_root_gen, args):
             is_metric.update(inception(batch[1]), batch_size)
 
     fid_score = fid.compute_fid(input_root_real, input_root_gen, num_workers=args.num_workers, use_dataparallel=False)
-    print('计算指标耗时:',time.time()-a)
+    print('Latency:',time.time()-a)
     print("PSNR:", psnr_metric.compute().item())
     print("LPIPS:", lpips_metric.compute().item())
     print("ssim:", ssim_metric.compute().item())
@@ -330,12 +337,6 @@ def plot_grid(args):
         for j in range(columns):
             raw_path = os.path.join(args.input_root_real,path[i*columns + j])
             shutil.copy(raw_path, original_fig) 
-            # if i==0: ##原图
-            #     img_path = os.path.join(args.input_root_real,path[j])
-            #     ax[i][j].set_title(path[j].split('.')[0]+'_real')
-            # if i==1: ##生成图
-            #     img_path = os.path.join(args.input_root_gen,path[j])
-            #     ax[i][j].set_title(path[j].split('.')[0]+'_gen')
             img_path = os.path.join(args.input_root_gen,path[i*columns + j])
             ax[i][j].set_title(path[i*columns + j].split('.')[0])
             ax[i][j].imshow(Image.open(img_path))
@@ -369,44 +370,3 @@ if __name__ == "__main__":
     parser.add_argument("--if_fp16", type=bool, default=True)
     args = parser.parse_args()
 
-
-
-    ################ sd1.5,fp16
-    # args.input_dir = 'evaluation/coco2017/sd1.5_fp16'
-    # args.input_root_gen = 'evaluation/coco2017/sd1.5_fp16/val2017_gen'
-
-
-
-    ################ tiny taesd
-    # args.input_dir = 'evaluation/coco2017/taesd_fp32'
-    # args.input_root_gen = 'evaluation/coco2017/taesd_fp32/val2017_gen'
-
-
-    ################ 剪枝模型
-    # args.if_baseline=False
-    # args.pretrained_model_name_or_path='outputs/vae_decoder_only_l1-pruner_ratio-0.5/checkpoint-50000'
-    # args.input_dir = 'evaluation/coco2017/vae_decoder_only_l1-pruner_ratio-0.5_50000_fp16'
-    # args.input_root_gen = 'evaluation/coco2017/vae_decoder_only_l1-pruner_ratio-0.5_50000_fp16/val2017_gen'
-
-    # ############### 保存预测图
-    torch.cuda.empty_cache()
-    gc.collect()
-    print('开始inference')
-    inference_gen_dir_gpu(args)
-
-
-    
-
-    # ############### 计算指标
-    # torch.cuda.empty_cache()
-    # gc.collect()
-    # print(10*'#' + 'index' + 10*'#')
-    # main(args.input_root_real,args.input_root_gen,args)
-
-
-
-    ############### 画图对比
-    # args.input_root_gen = 'evaluation/coco2017/vae_decoder_only_l1-pruner_ratio-0.5_50000_fp16/val2017_gen'
-    # args.input_root_gen = 'evaluation/coco2017/sd1.5/val2017_gen'
-    #args.input_root_gen = 'evaluation/coco2017/taesd_fp32/val2017_gen'
-    #plot_grid(args)

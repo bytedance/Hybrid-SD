@@ -1,4 +1,4 @@
-# coding=utf-8
+# Copyright (c) 2024 Bytedance Ltd. and/or its affiliates
 # Copyright 2023 The HuggingFace Inc. team.
 # Copyright (c) 2022, NVIDIA CORPORATION.  All rights reserved.
 #

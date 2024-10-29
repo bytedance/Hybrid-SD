@@ -173,3 +173,6 @@ If you find our work helpful, please cite it!
   year={2024}
 }
 ```
+
+## License
+This project is licensed under the [Apache-2.0 License](LICENSE).

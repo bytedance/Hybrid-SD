@@ -1,7 +1,7 @@
-# ------------------------------------------------------------------------------------
+# Copyright (c) 2024 Bytedance Ltd. and/or its affiliates
 # Copyright 2023. Nota Inc. All Rights Reserved.
 # Code modified from https://github.com/mlfoundations/open_clip/tree/37b729bc69068daa7e860fb7dbcf1ef1d03a4185#usage
-# ------------------------------------------------------------------------------------
+
 
 import os
 import argparse

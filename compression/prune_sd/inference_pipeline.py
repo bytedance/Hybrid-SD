@@ -1,7 +1,7 @@
-# ------------------------------------------------------------------------------------
+# Copyright (c) 2024 Bytedance Ltd. and/or its affiliates
 # Copyright 2023. Nota Inc. All Rights Reserved.
 # Code modified from https://huggingface.co/blog/stable_diffusion
-# ------------------------------------------------------------------------------------
+
 
 import diffusers
 from diffusers import StableDiffusionPipeline
