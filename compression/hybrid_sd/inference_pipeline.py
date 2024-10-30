@@ -152,7 +152,7 @@ class HybridInferencePipeline:
             )
         unets = []
         for path in self.weight_folders:
-            if 'prune' in path or 'Prune' in path or 'ours' in path:
+            if 'hybrid-sd' in path:
                 MODEL_OBJ = CustomUNet2DConditionModel
             else:
                 MODEL_OBJ = UNet2DConditionModel

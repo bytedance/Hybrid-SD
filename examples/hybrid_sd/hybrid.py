@@ -122,20 +122,11 @@ if __name__ == "__main__":
             model_arch = model.split("/")[-5]
             model_config = model.split("/")[-3]
             model_name = f'{model_arch}--{model_config}'
-        # step_str += f'{model_name}_'
         model_names.append(model_name)
     print(f"Model: {model_names}, Steps: {args.steps}")
-    # step_str += "_".join(map(str, args.steps))
-    # save_path = os.path.join(args.output_dir, step_str)
     save_path = args.output_dir
     print(f"output_dir={save_path}")
     os.makedirs(save_path, exist_ok=True)
-    # logger = LoggerWithDepth(
-    #     env_name="log", 
-    #     config=args.__dict__,
-    #     root_dir=save_path,
-    #     setup_sublogger=False
-    # )
     logging.basicConfig(
         format="%(asctime)s - %(levelname)s - %(name)s - %(message)s",
         datefmt="%m/%d/%Y %H:%M:%S",
@@ -160,8 +151,6 @@ if __name__ == "__main__":
     example_inputs = [torch.randn((2, 4, 64, 64), dtype=torch.float16).to(args.device), torch.randn(1, dtype=torch.float16).to(args.device), torch.randn((2, 77, 768), dtype=torch.float16).to(args.device)]
     for unet_id, unet in enumerate(pipeline.pipe.unets):
         unet_copy = deepcopy(unet)
-        # unet_copy.train()
-        # print(unet_copy)
         flops, macs, params = calculate_flops(
             model=unet_copy, 
             args=example_inputs,
@@ -227,7 +216,6 @@ if __name__ == "__main__":
     logger.info(f"Avrage latency: {avg_latency:.2f} sec elapsed")
     pipeline.clear()
 
-    print(model_info)
     model_info_path = os.path.join(save_path, f"model_info.json")
     model_info['latency'] = latency
     with open(model_info_path, 'w') as f:

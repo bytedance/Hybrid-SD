@@ -1,14 +1,14 @@
 export PYTHONPATH='.'
 MODEL_ROOT=pretrained_models
 MODEL_LARGE=CompVis--stable-diffusion-v1-4
-MODEL_SMALL=nota-ai--bk-sdm-tiny
+MODEL_SMALL=hybrid-sd-224m
 
 PATH_MODEL_LARGE=$MODEL_ROOT/$MODEL_LARGE
-PATH_MODEL_SMALL=results/ours_tiny/a19_b21/checkpoint-50000 # path to our tiny model
+PATH_MODEL_SMALL=$MODEL_ROOT/cqyan/hybrid-sd-224m # path to our tiny model
 
-GPU_NUM=1
+GPU_NUM=0
 
-step_list=("0,25"  "10,15"  "25,0")
+step_list=("0,25" "10,15" "25,0")
 
 
 for STEP in ${step_list[@]}
