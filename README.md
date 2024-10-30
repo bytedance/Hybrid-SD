@@ -148,7 +148,7 @@ Ours VAE shows better visual quality and detail refinements than TAESD. Ours VAE
 |SDXL [tiny vae](https://huggingface.co/cqyan/hybrid-sd-tiny-vae-xl) (Ours)|61.1|8017|
 |SD1.5 baseline vae|186.6|12987|
 |SD1.5 [small vae](https://huggingface.co/cqyan/hybrid-sd-small-vae) (Ours)|135.6|9087|
-|SD1.5 [tiny vae]((https://huggingface.co/cqyan/hybrid-sd-tiny-vae)) (Ours)|16.4|6929|
+|SD1.5 [tiny vae](https://huggingface.co/cqyan/hybrid-sd-tiny-vae) (Ours)|16.4|6929|
 
 
 <div align="center">
